@@ -196,7 +196,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                     FirebaseAuth.getInstance().signOut();
                                     loaderDialog.dismiss();
                                     AlertDialog.Builder builder2 = new AlertDialog.Builder(RegistrationActivity.this);
-                                    builder2.setTitle("Registration completed");
+                                    builder2.setTitle("Registration completed!");
                                     builder2.setMessage("we have sent you E-mail on " + email + " for verification");
                                     builder2.setCancelable(false);
                                     builder2.setPositiveButton("OK", new DialogInterface.OnClickListener() {
