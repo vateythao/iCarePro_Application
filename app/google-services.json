@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "246926867174",
+    "project_id": "icarepro-7a66c",
+    "storage_bucket": "icarepro-7a66c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246926867174:android:9fbb4f86bf1e1b9325d927",
+        "android_client_info": {
+          "package_name": "com.vat.icare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "246926867174-md3cao0anrk85ks7v35m0impu9fp2g3s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vat.icare",
+            "certificate_hash": "51c4457198238e201efaefb1daab777fe9921685"
+          }
+        },
+        {
+          "client_id": "246926867174-snsfpt8ah44tn63cjfmh991or1amclil.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlMVFNIGjcP6tnCiPSiUP37JVpXhs0Fuc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "246926867174-snsfpt8ah44tn63cjfmh991or1amclil.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
