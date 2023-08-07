@@ -26,8 +26,9 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="150dp"
-            android:background="@drawable/background_banner"/>
+            android:background="@drawable/background_banner"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
 
         <LinearLayout
             android:id="@+id/usernameEt"
@@ -132,7 +133,7 @@
             android:layout_marginTop="24dp"
             android:background="?android:attr/selectableItemBackground"
             android:text="@string/new_user"
-            android:textColor="@color/black"
+            android:textColor="@color/colorDarkGreen"
             app:layout_constraintEnd_toEndOf="@+id/loginBtn"
             app:layout_constraintStart_toStartOf="@+id/loginBtn"
             app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
