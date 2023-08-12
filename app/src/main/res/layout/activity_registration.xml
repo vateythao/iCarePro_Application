@@ -21,12 +21,12 @@
             android:id="@+id/imgProfile"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            app:civ_border_width="2dp"
+            android:src="@drawable/person_default"
             app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolBar"
-            android:src="@drawable/person_default"/>
+            app:layout_constraintTop_toBottomOf="@+id/toolBar" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/imgAddPhoto"
@@ -34,9 +34,10 @@
             android:layout_height="35dp"
             app:cardCornerRadius="60dp"
             app:cardElevation="5dp"
+            app:cardMaxElevation="5dp"
             app:layout_constraintBottom_toBottomOf="@+id/imgProfile"
-            app:layout_constraintEnd_toEndOf="@+id/imgProfile"
-            app:cardMaxElevation="5dp">
+            app:layout_constraintEnd_toEndOf="@+id/imgProfile">
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -48,19 +49,19 @@
 
         <View
             android:layout_width="match_parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgAddPhoto"
             android:layout_height="0dp"
+            android:background="@drawable/background_banner"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@drawable/background_banner"/>
+            app:layout_constraintTop_toBottomOf="@+id/imgAddPhoto" />
 
         <LinearLayout
             android:id="@+id/llFirstName"
             android:layout_width="match_parent"
-            android:layout_marginTop="60dp"
-            android:layout_marginHorizontal="16dp"
             android:layout_height="40dp"
-            android:gravity="center"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="40dp"
             android:background="@drawable/background_edittext"
+            android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/imgProfile">
 
@@ -81,14 +82,14 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/llLastName"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:id="@+id/llLastName"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
             android:layout_marginHorizontal="16dp"
-            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
             android:background="@drawable/background_edittext"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/llFirstName">
 
             <EditText
@@ -109,14 +110,14 @@
 
         <LinearLayout
             android:id="@+id/llEmail"
-            app:layout_constraintTop_toBottomOf="@+id/llLastName"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:gravity="center"
-            android:background="@drawable/background_edittext"
-            android:layout_marginTop="20dp"
             android:layout_marginHorizontal="16dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="20dp"
+            android:background="@drawable/background_edittext"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/llLastName">
 
             <EditText
                 android:id="@+id/edtEmail"
@@ -138,10 +139,10 @@
             android:id="@+id/llPassword"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:gravity="center"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/background_edittext"
+            android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/llEmail">
 
@@ -157,7 +158,7 @@
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:textColor="@color/black"
-                android:textSize="12sp"  />
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -165,11 +166,11 @@
             android:id="@+id/llConfirmPassword"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:gravity="center"
-            android:background="@drawable/background_edittext"
-            android:orientation="horizontal"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="20dp"
+            android:background="@drawable/background_edittext"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/llPassword">
 
             <EditText
@@ -188,6 +189,132 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/llHandW"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/llConfirmPassword">
+
+            <LinearLayout
+                android:id="@+id/llHeight"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/background_edittext"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edtHeight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="start"
+                    android:hint="height(CM)"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/background_edittext"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edtWeight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="start"
+                    android:hint="Wight(Kg's)"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSexAndGender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/llHandW">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/background_edittext"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rbMale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Male"/>
+                    <RadioButton
+                        android:id="@+id/rbFemale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Female"/>
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/background_edittext"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edtAge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@null"
+                    android:gravity="start"
+                    android:hint="Age"
+                    android:inputType="number"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
@@ -198,7 +325,7 @@
             android:text="Sign Up"
             android:textColor="@color/colorWhite"
             android:textSize="12sp"
-            app:layout_constraintTop_toBottomOf="@+id/llConfirmPassword"/>
+            app:layout_constraintTop_toBottomOf="@+id/llSexAndGender" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
