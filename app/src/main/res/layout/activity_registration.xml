@@ -269,6 +269,7 @@
                 android:orientation="horizontal">
 
                 <RadioGroup
+                    android:id="@+id/rdGSelection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">

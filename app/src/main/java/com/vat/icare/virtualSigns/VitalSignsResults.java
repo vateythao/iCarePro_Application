@@ -32,8 +32,6 @@ public class VitalSignsResults extends AppCompatActivity {
         TextView VSRR = this.findViewById(R.id.RRV);
         TextView VSBPS = this.findViewById(R.id.BP2V);
         TextView VSHR = this.findViewById(R.id.HRV);
-        TextView VSO2 = this.findViewById(R.id.O2V);
-        ImageButton All = this.findViewById(R.id.SendAll);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -46,22 +44,7 @@ public class VitalSignsResults extends AppCompatActivity {
             VSRR.setText(String.valueOf(VRR));
             VSHR.setText(String.valueOf(VHR));
             VSBPS.setText(VBP1 + " / " + VBP2);
-            VSO2.setText(String.valueOf(VO2));
         }
-
-        All.setOnClickListener(v -> {
-            Intent i = new Intent(Intent.ACTION_SEND);
-            i.setType("message/rfc822");
-            i.putExtra(Intent.EXTRA_EMAIL, new String[]{"recipient@example.com"});
-            i.putExtra(Intent.EXTRA_SUBJECT, "Health Watcher");
-            i.putExtra(Intent.EXTRA_TEXT, user + "'s new measuerment " + "\n" + " at " + Date + " are :" + "\n" + "Heart Rate = " + VHR + "\n" + "Blood Pressure = " + VBP1 + " / " + VBP2 + "\n" + "Respiration Rate = " + VRR + "\n" + "Oxygen Saturation = " + VO2);
-            try {
-                startActivity(Intent.createChooser(i, "Send mail..."));
-            } catch (android.content.ActivityNotFoundException ex) {
-                Toast.makeText(VitalSignsResults.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
     }
 
     @Override

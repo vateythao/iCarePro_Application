@@ -13,11 +13,13 @@ import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -45,6 +47,7 @@ import java.util.Map;
 public class RegistrationActivity extends AppCompatActivity {
     private final String TAG = "CA/LoginActivity";
     String  base64;
+    String  gender;
     LoginViewModel loginViewModel;
     ActivityRegistrationBinding binding;
     LoaderDialog loaderDialog;
@@ -73,6 +76,18 @@ public class RegistrationActivity extends AppCompatActivity {
                    String password=binding.edtPassword.getText().toString().trim();
                    firebaseRegistrations(fullName,email, password, base64);
                }
+            }
+        });
+
+        binding.rdGSelection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+                if (checkedId == R.id.rbMale) {
+                    gender = "Male";
+                }
+                if (checkedId == R.id.rbFemale) {
+                    gender = "Female";
+                }
             }
         });
 
@@ -161,6 +176,18 @@ public class RegistrationActivity extends AppCompatActivity {
         }else if (binding.edtConfirmPassword.getText().toString().trim().equals("")){
             valid=false;
             binding.edtConfirmPassword.setError("Confirm Password Required");
+        }else if (binding.edtHeight.getText().toString().trim().equals("")){
+            valid=false;
+            binding.edtHeight.setError("Height Required");
+        }else if (binding.edtWeight.getText().toString().trim().equals("")){
+            valid=false;
+            binding.edtWeight.setError("Weight Required");
+        }else if (binding.edtAge.getText().toString().trim().equals("")){
+            valid=false;
+            binding.edtAge.setError("Age Required");
+        }else if (gender.trim().equals("")){
+            valid=false;
+            Toast.makeText(this, "Gender missing", Toast.LENGTH_SHORT).show();
         }
         return valid;
     }
@@ -183,6 +210,10 @@ public class RegistrationActivity extends AppCompatActivity {
                         map.put("name", fullName);
                         map.put("email", email);
                         map.put("password", password);
+                        map.put("height", binding.edtHeight.getText().toString().trim());
+                        map.put("weight", binding.edtWeight.getText().toString().trim());
+                        map.put("age", binding.edtAge.getText().toString().trim());
+                        map.put("gender", gender);
                         map.put("image", profileImage);
                         map.put("date", ServerValue.TIMESTAMP);
 

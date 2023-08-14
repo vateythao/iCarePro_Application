@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorDarkTheme">#182B3C</color>
     <color name="colorNewTheme">#182B3C</color>
     <color name="colorBackGroundEdittext">#526278</color>
     <color name="colorGreyLite">#EFEFEF</color>
+    <color name="colorGrey">#E8E0E0</color>
     <color name="colorGoogle">#E57163</color>
     <color name="colorfacebook">#4267B2</color>
     <color name="colorApple">#B3B3B3</color>
     <color name="colorText">#8D8D93</color>
     <color name="colorBlue">#4C84FF</color>
     <color name="colorGreen">#45C467</color>
-    <color name="colorDarkGreen">#196F3D</color>
+    <color name="colorDarkGreen">#2EAA3A</color>
     <color name="colorback">#E6EBF1</color>
     <color name="colorRed">#E74C3C</color>
     <color name="golder_rating_color">#dfa102</color>
@@ -36,7 +37,6 @@
     <color name="colorPurple">#6c63ff</color>
     <color name="colorIndigo">#303F9F</color>
     <color name="colorBlueMidnight">#003366</color>
-    <color name="colorGrey">#C9C9C9</color>
     <color name="colorWhite">#FFFFFF</color>
 
 </resources>

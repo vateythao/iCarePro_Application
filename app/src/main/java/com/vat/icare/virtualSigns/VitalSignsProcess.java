@@ -14,9 +14,17 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.common.net.InternetDomainName;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.vat.icare.R;
 import com.vat.icare.virtualSigns.Math.Fft;
 import com.vat.icare.virtualSigns.Math.Fft2;
@@ -74,24 +82,39 @@ public class VitalSignsProcess extends AppCompatActivity {
     public ArrayList<Double> RedAvgList = new ArrayList<>();
     public ArrayList<Double> BlueAvgList = new ArrayList<>();
     public int counter = 0;
+    DatabaseReference userRef;
 
     @SuppressLint("InvalidWakeLockTag")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vital_signs_process);
+        userRef = FirebaseDatabase.getInstance().getReference().child("Users");
+       String caller_userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             user = extras.getString("Usr");
             //The key argument here must match that used in the other activity
         }
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                snapshot.getRef();
+                if (snapshot.child(caller_userid).exists()) {
+                    Hei = Double.parseDouble(snapshot.child(caller_userid).child("height").getValue().toString());
+                    Wei = Double.parseDouble(snapshot.child(caller_userid).child("weight").getValue().toString());
+                    Agg = Double.parseDouble(snapshot.child(caller_userid).child("age").getValue().toString());
+                    Gen = Double.parseDouble(snapshot.child(caller_userid).child("gender").getValue().toString());
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
 
         //Get parameters from Db
-        //Hei = Integer.parseInt(Data.getheight(user));
-        //Wei = Integer.parseInt(Data.getweight(user));
-        //Agg = Integer.parseInt(Data.getage(user));
-        //Gen = Integer.parseInt(Data.getgender(user));
+
 
         if (Gen == 1) {
             Q = 5;
