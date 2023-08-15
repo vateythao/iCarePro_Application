@@ -3,9 +3,11 @@ package com.vat.icare.virtualSigns;
 import static java.lang.Math.ceil;
 import static java.lang.Math.sqrt;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.common.net.InternetDomainName;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,7 +66,6 @@ public class VitalSignsProcess extends AppCompatActivity {
 
     //SPO2 variable
     private static Double[] RedBlueRatio;
-    public int o2;
     double Stdr = 0;
     double Stdb = 0;
     double sumred = 0;
@@ -70,6 +73,7 @@ public class VitalSignsProcess extends AppCompatActivity {
 
     //RR variable
     public int Breath = 0;
+    String userName;
     public double bufferAvgBr = 0;
 
     //BloodPressure variables
@@ -84,30 +88,46 @@ public class VitalSignsProcess extends AppCompatActivity {
     public int counter = 0;
     DatabaseReference userRef;
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+            }
+        }
+    }
+
     @SuppressLint("InvalidWakeLockTag")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vital_signs_process);
-        userRef = FirebaseDatabase.getInstance().getReference().child("Users");
-       String caller_userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            user = extras.getString("Usr");
-            //The key argument here must match that used in the other activity
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
         }
+
+        String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        userRef = FirebaseDatabase.getInstance().getReference().child("Users");
+
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 snapshot.getRef();
-                if (snapshot.child(caller_userid).exists()) {
-                    Hei = Double.parseDouble(snapshot.child(caller_userid).child("height").getValue().toString());
-                    Wei = Double.parseDouble(snapshot.child(caller_userid).child("weight").getValue().toString());
-                    Agg = Double.parseDouble(snapshot.child(caller_userid).child("age").getValue().toString());
-                    Gen = Double.parseDouble(snapshot.child(caller_userid).child("gender").getValue().toString());
+                if (snapshot.child(userid).exists()) {
+                    String height = (snapshot.child(userid).child("height").getValue().toString());
+                    Hei = Double.parseDouble(height);
+                    String weight = (snapshot.child(userid).child("weight").getValue().toString());
+                    Wei= Double.parseDouble(weight);
+                    String age = (snapshot.child(userid).child("age").getValue().toString());
+                    Agg= Double.parseDouble(age);
+                    String gender = (snapshot.child(userid).child("gender").getValue().toString());
+                    userName = (snapshot.child(userid).child("name").getValue().toString());
+                    Gen= Double.parseDouble(gender);
+
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
@@ -272,11 +292,6 @@ public class VitalSignsProcess extends AppCompatActivity {
                 //calculating ratio between the two means and two variances
                 double R = (varr / meanr) / (varb / meanb);
 
-                //estimating SPo2
-                double spo2 = 100 - 5 * (R);
-
-                o2 = (int) (spo2);
-
 
                 //comparing if heartbeat and Respiration rate are reasonable from the green and red intensities then take the average, otherwise value from green or red intensity if one of them is good and other is bad.
                 if ((bpm > 45 || bpm < 200) || (breath > 10 || breath < 20)) {
@@ -325,14 +340,14 @@ public class VitalSignsProcess extends AppCompatActivity {
             }
 
             //if all those variable contains a valid values then swap them to results activity and finish the processing activity
-            if ((Beats != 0) && (SP != 0) && (DP != 0) && (o2 != 0) && (Breath != 0)) {
+            if ((Beats != 0) && (SP != 0) && (DP != 0) && (Breath != 0)) {
                 Intent i = new Intent(VitalSignsProcess.this, VitalSignsResults.class);
-                i.putExtra("O2R", o2);
                 i.putExtra("breath", Breath);
                 i.putExtra("bpm", Beats);
                 i.putExtra("SP", SP);
                 i.putExtra("DP", DP);
                 i.putExtra("Usr", user);
+                i.putExtra("userName", userName);
                 startActivity(i);
                 finish();
             }

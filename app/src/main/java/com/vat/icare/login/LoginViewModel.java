@@ -1,23 +1,36 @@
 package com.vat.icare.login;
 
+import android.app.Application;
+
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.vat.icare.utils.romDB.VitalSign;
+import com.vat.icare.utils.romDB.VitalSignRepository;
+
+import java.util.List;
 
 /**
  * Created by Dell on 20,July,2023
  */
-public class LoginViewModel extends ViewModel {
+public class LoginViewModel extends AndroidViewModel {
 
-    // NewsRepository newsRepository;
-    // MutableLiveData<NewsResponse> getPostData;
+    private VitalSignRepository studentRepository;
+    private final LiveData<List<VitalSign>> listLiveData;
 
-    // public ModeListViewModel() {
-    //     newsRepository = new NewsRepository();
-    // }
+    public LoginViewModel(Application application) {
+        super(application);
+        studentRepository = new VitalSignRepository(application);
+        listLiveData = studentRepository.getAllStudents();
+    }
 
-    // public LiveData<NewsResponse> getDataAPI() {
-    //     if (getPostData == null) {
-    //         getPostData = newsRepository.postData();
-    //     }
-    //     return getPostData;
-    // }
+    public LiveData<List<VitalSign>> getAllStudentsFromVm() {
+        return listLiveData;
+    }
+
+    public void insertStudent(VitalSign student) {
+        studentRepository.insertStudent(student);
+    }
+
 }

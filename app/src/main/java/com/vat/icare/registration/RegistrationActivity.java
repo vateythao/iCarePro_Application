@@ -39,6 +39,7 @@ import com.vat.icare.databinding.ActivityRegistrationBinding;
 import com.vat.icare.login.LoginActivity;
 import com.vat.icare.login.LoginViewModel;
 import com.vat.icare.utils.LoaderDialog;
+import com.vat.icare.virtualSigns.VitalSignsProcess;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
@@ -83,10 +84,10 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
                 if (checkedId == R.id.rbMale) {
-                    gender = "Male";
+                    gender = "1";
                 }
                 if (checkedId == R.id.rbFemale) {
-                    gender = "Female";
+                    gender = "2";
                 }
             }
         });

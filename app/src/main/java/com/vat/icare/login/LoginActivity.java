@@ -20,6 +20,8 @@ import com.vat.icare.R;
 import com.vat.icare.databinding.ActivityLoginBinding;
 import com.vat.icare.registration.RegistrationActivity;
 import com.vat.icare.utils.LoaderDialog;
+import com.vat.icare.virtualSigns.VitalSignsProcess;
+
 public class LoginActivity extends AppCompatActivity {
 
     private final String TAG = "CA/LoginActivity";
@@ -75,17 +77,18 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-
-                                if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
-                                    Intent intent=new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                } else {
-                                    loaderDialog.dismiss();
-                                    Toast.makeText(getApplicationContext(), "Your email is not verified, we have sent you a new one.", Toast.LENGTH_LONG).show();
-                                    FirebaseAuth.getInstance().signOut();
-                                }
-                            } else {
                                 loaderDialog.dismiss();
+                                Intent intent=new Intent(LoginActivity.this, VitalSignsProcess.class);
+                                startActivity(intent);
+                               //if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
+                               //
+                               //} else {
+                               //    FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
+                               //    Toast.makeText(getApplicationContext(), "Your email is not verified, we have sent you a new one.", Toast.LENGTH_LONG).show();
+                               //    FirebaseAuth.getInstance().signOut();
+                               //}
+                            } else {
+
                                 Log.d(TAG, "uploadToken failed: " + task.getException().getMessage());
                             }
                         }

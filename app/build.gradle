@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -74,4 +76,16 @@ dependencies {
     implementation 'com.squareup.okhttp:okhttp:2.5.0'
     implementation "com.google.firebase:firebase-iid:21.1.0"
     implementation 'com.opentok.android:opentok-android-sdk:2.20.1'
+    implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+    //RoomDb
+    implementation "androidx.room:room-ktx:2.5.2"
+    kapt "androidx.room:room-compiler:2.5.2"
+    androidTestImplementation "androidx.room:room-testing:2.5.2"
+    // Lifecycle components
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.6.1"
+    // Kotlin components
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 }
