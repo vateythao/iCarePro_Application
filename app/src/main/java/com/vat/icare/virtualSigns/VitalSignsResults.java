@@ -74,6 +74,7 @@ public class VitalSignsResults extends AppCompatActivity {
                 VitalSign vitalSign=new VitalSign(userName,binding.BP2V.getText().toString(),
                         binding.HRV.getText().toString(),binding.edtSugar.getText().toString(),binding.RRV.getText().toString());
                 viewModel.insertStudent(vitalSign);
+                Toast.makeText(context, "Completed", Toast.LENGTH_SHORT).show();
             }
         });
     }
