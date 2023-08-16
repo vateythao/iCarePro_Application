@@ -13,7 +13,8 @@
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission
-        android:name="android.permission.ACCESS_SURFACE_FLINGER" tools:ignore="ProtectedPermissions" />
+        android:name="android.permission.ACCESS_SURFACE_FLINGER"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
@@ -26,10 +27,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".virtualSigns.HistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".virtualSigns.VitalSignsResults"
             android:exported="false" />
-        <activity android:name=".virtualSigns.VitalSignsProcess"/>
-
+        <activity android:name=".virtualSigns.VitalSignsProcess" />
         <activity
             android:name=".onBoarding.OnBoardingActivity"
             android:exported="true">
@@ -47,8 +50,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
     </application>
 
 </manifest>

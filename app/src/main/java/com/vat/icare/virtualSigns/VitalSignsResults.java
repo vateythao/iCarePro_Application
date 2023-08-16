@@ -58,8 +58,8 @@ public class VitalSignsResults extends AppCompatActivity {
             VBP1 = bundle.getInt("SP");
             VBP2 = bundle.getInt("DP");
             VSRR.setText(String.valueOf(VRR));
-            VSHR.setText(String.valueOf(VHR));
-            VSBPS.setText(VBP1 + " / " + VBP2);
+            VSHR.setText(String.valueOf(VBP2));
+            VSBPS.setText(VBP1 );
         }
         binding.btnStartAgain.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +75,13 @@ public class VitalSignsResults extends AppCompatActivity {
                         binding.HRV.getText().toString(),binding.edtSugar.getText().toString(),binding.RRV.getText().toString());
                 viewModel.insertStudent(vitalSign);
                 Toast.makeText(context, "Completed", Toast.LENGTH_SHORT).show();
+            }
+        });
+        binding.txtHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(context,HistoryActivity.class);
+                startActivity(intent);
             }
         });
     }
