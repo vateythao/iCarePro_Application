@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.vat.icare.MainActivity;
 import com.vat.icare.R;
 import com.vat.icare.virtualSigns.Math.Fft;
 import com.vat.icare.virtualSigns.Math.Fft2;
@@ -76,6 +77,8 @@ public class VitalSignsProcess extends AppCompatActivity {
     String userName;
     public double bufferAvgBr = 0;
 
+    public int o2;
+
     //BloodPressure variables
     public double Gen, Agg, Hei, Wei;
     public double Q = 4.5;
@@ -88,24 +91,14 @@ public class VitalSignsProcess extends AppCompatActivity {
     public int counter = 0;
     DatabaseReference userRef;
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
-            }
-        }
-    }
 
     @SuppressLint("InvalidWakeLockTag")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vital_signs_process);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
-        }
+
 
         String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         userRef = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -291,6 +284,10 @@ public class VitalSignsProcess extends AppCompatActivity {
 
                 //calculating ratio between the two means and two variances
                 double R = (varr / meanr) / (varb / meanb);
+                //estimating SPo2
+                double spo2 = 100 - 5 * (R);
+
+                o2 = (int) (spo2);
 
 
                 //comparing if heartbeat and Respiration rate are reasonable from the green and red intensities then take the average, otherwise value from green or red intensity if one of them is good and other is bad.
@@ -340,8 +337,9 @@ public class VitalSignsProcess extends AppCompatActivity {
             }
 
             //if all those variable contains a valid values then swap them to results activity and finish the processing activity
-            if ((Beats != 0) && (SP != 0) && (DP != 0) && (Breath != 0)) {
+            if ((Beats != 0) && (SP != 0) && (DP != 0) && (o2 != 0) && (Breath != 0)) {
                 Intent i = new Intent(VitalSignsProcess.this, VitalSignsResults.class);
+                i.putExtra("O2R", o2);
                 i.putExtra("breath", Breath);
                 i.putExtra("bpm", Beats);
                 i.putExtra("SP", SP);
@@ -414,7 +412,7 @@ public class VitalSignsProcess extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i = new Intent(VitalSignsProcess.this, InternetDomainName.class);
+        Intent i = new Intent(VitalSignsProcess.this, MainActivity.class);
         i.putExtra("Usr", user);
         startActivity(i);
         finish();

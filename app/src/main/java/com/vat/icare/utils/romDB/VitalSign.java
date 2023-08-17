@@ -4,22 +4,33 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "vitalSigns")
+@Entity(tableName = "vitalSigns_table")
 public class VitalSign {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    int id;
     @NonNull
     String name;
-    String bloodP_pressure;
-    String heart_rate;
-    String sugar;
-    String pulse;
+    int bloodP_sys;
+    int bloodP_dia;
+    int heart_rate;
+    int sugar;
+    int pulse;
 
-    public VitalSign(@NonNull String name, String bloodP_pressure, String heart_rate, String sugar, String pulse) {
+    public VitalSign(@NonNull String name, int bloodP_sys, int bloodP_dia, int heart_rate, int sugar, int pulse) {
         this.name = name;
-        this.bloodP_pressure = bloodP_pressure;
+        this.bloodP_sys = bloodP_sys;
+        this.bloodP_dia = bloodP_dia;
         this.heart_rate = heart_rate;
         this.sugar = sugar;
         this.pulse = pulse;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @NonNull
@@ -31,35 +42,43 @@ public class VitalSign {
         this.name = name;
     }
 
-    public String getBloodP_pressure() {
-        return bloodP_pressure;
+    public int getBloodP_sys() {
+        return bloodP_sys;
     }
 
-    public void setBloodP_pressure(String bloodP_pressure) {
-        this.bloodP_pressure = bloodP_pressure;
+    public void setBloodP_sys(int bloodP_sys) {
+        this.bloodP_sys = bloodP_sys;
     }
 
-    public String getHeart_rate() {
+    public int getBloodP_dia() {
+        return bloodP_dia;
+    }
+
+    public void setBloodP_dia(int bloodP_dia) {
+        this.bloodP_dia = bloodP_dia;
+    }
+
+    public int getHeart_rate() {
         return heart_rate;
     }
 
-    public void setHeart_rate(String heart_rate) {
+    public void setHeart_rate(int heart_rate) {
         this.heart_rate = heart_rate;
     }
 
-    public String getSugar() {
+    public int getSugar() {
         return sugar;
     }
 
-    public void setSugar(String sugar) {
+    public void setSugar(int sugar) {
         this.sugar = sugar;
     }
 
-    public String getPulse() {
+    public int getPulse() {
         return pulse;
     }
 
-    public void setPulse(String pulse) {
+    public void setPulse(int pulse) {
         this.pulse = pulse;
     }
 }

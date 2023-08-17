@@ -20,6 +20,7 @@ import com.vat.icare.R;
 import com.vat.icare.databinding.ActivityLoginBinding;
 import com.vat.icare.registration.RegistrationActivity;
 import com.vat.icare.utils.LoaderDialog;
+import com.vat.icare.virtualSigns.StartVitalSigns;
 import com.vat.icare.virtualSigns.VitalSignsProcess;
 
 public class LoginActivity extends AppCompatActivity {
@@ -78,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 loaderDialog.dismiss();
-                                Intent intent=new Intent(LoginActivity.this, VitalSignsProcess.class);
+                                Intent intent=new Intent(LoginActivity.this, StartVitalSigns.class);
                                 startActivity(intent);
                                //if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
                                //

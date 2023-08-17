@@ -24,7 +24,7 @@ public abstract class BloodPressureDatabase extends RoomDatabase {
             synchronized (BloodPressureDatabase.class) {
                 if (bloodPressureDatabase == null) {
                     bloodPressureDatabase = Room.databaseBuilder(context.getApplicationContext(),
-                                    BloodPressureDatabase.class, "bloodPressure_database")
+                                    BloodPressureDatabase.class, "vitalSigns_database")
                             .build();
                 }
             }

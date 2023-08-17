@@ -25,11 +25,11 @@ public class LoginViewModel extends AndroidViewModel {
         listLiveData = studentRepository.getAllStudents();
     }
 
-    public LiveData<List<VitalSign>> getAllStudentsFromVm() {
+    public LiveData<List<VitalSign>> getAllVitalFromVm() {
         return listLiveData;
     }
 
-    public void insertStudent(VitalSign student) {
+    public void insertVital(VitalSign student) {
         studentRepository.insertStudent(student);
     }
 

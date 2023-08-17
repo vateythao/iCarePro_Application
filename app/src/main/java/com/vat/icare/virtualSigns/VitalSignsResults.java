@@ -18,6 +18,7 @@ import com.vat.icare.MainActivity;
 import com.vat.icare.R;
 import com.vat.icare.databinding.ActivityRegistrationBinding;
 import com.vat.icare.databinding.ActivityVitalSignsResultsBinding;
+import com.vat.icare.domin.VitalSignViewModel;
 import com.vat.icare.login.LoginViewModel;
 import com.vat.icare.utils.romDB.VitalSign;
 
@@ -28,21 +29,21 @@ import java.util.Date;
 
 public class VitalSignsResults extends AppCompatActivity {
 
-     String user, Date, userName;
+     String Date, userName;
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
     Date today = Calendar.getInstance().getTime();
     int VBP1, VBP2, VRR, VHR, VO2;
+    VitalSignViewModel viewModel;
 
     Context context;
     ActivityVitalSignsResultsBinding binding;
-    LoginViewModel viewModel;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_vital_signs_results);
-        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        viewModel = new ViewModelProvider(this).get(VitalSignViewModel.class);
         context=this;
 
         Date = df.format(today);
@@ -53,13 +54,14 @@ public class VitalSignsResults extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             VRR = bundle.getInt("breath");
-            userName = bundle.getString("userName");
             VHR = bundle.getInt("bpm");
             VBP1 = bundle.getInt("SP");
             VBP2 = bundle.getInt("DP");
+            VO2 = bundle.getInt("O2R");
+            userName = bundle.getString("userName");
             VSRR.setText(String.valueOf(VRR));
             VSHR.setText(String.valueOf(VBP2));
-            VSBPS.setText(VBP1 );
+            VSBPS.setText(VBP1 + " / " + VBP2);
         }
         binding.btnStartAgain.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,8 +73,11 @@ public class VitalSignsResults extends AppCompatActivity {
         binding.btnSaveData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                VitalSign vitalSign=new VitalSign(userName,binding.BP2V.getText().toString(),
-                        binding.HRV.getText().toString(),binding.edtSugar.getText().toString(),binding.RRV.getText().toString());
+                int sugar= Integer.parseInt(binding.edtSugar.getText().toString());
+                int pulse= Integer.parseInt(binding.RRV.getText().toString());
+
+                VitalSign vitalSign=new VitalSign(userName,VBP1,VBP2,VRR,
+                        sugar,pulse);
                 viewModel.insertStudent(vitalSign);
                 Toast.makeText(context, "Completed", Toast.LENGTH_SHORT).show();
             }
@@ -90,7 +95,6 @@ public class VitalSignsResults extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent i = new Intent(VitalSignsResults.this, MainActivity.class);
-        i.putExtra("Usr", user);
         startActivity(i);
         finish();
     }

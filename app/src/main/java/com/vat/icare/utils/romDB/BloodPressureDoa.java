@@ -12,15 +12,15 @@ import java.util.List;
 @Dao
 public interface BloodPressureDoa {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(VitalSign student);
 
     @Update
     void update(VitalSign student);
 
-    @Query("Select * from vitalSigns order by name ASC")
+    @Query("SELECT * from vitalSigns_table ORDER By id Asc")
     LiveData<List<VitalSign>> getStudent();
 
-    @Query("DELETE from vitalSigns")
+    @Query("DELETE from vitalSigns_table")
     void deleteAll();
 }
