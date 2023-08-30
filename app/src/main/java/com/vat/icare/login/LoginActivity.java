@@ -66,14 +66,12 @@ public class LoginActivity extends AppCompatActivity {
 
     public void FirebaseLogin(String emailId, String passwordId) {
         loaderDialog.show();
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(emailId,
-                passwordId).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(emailId,passwordId).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     String token = FirebaseInstanceId.getInstance().getToken();
                     String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
                     FirebaseDatabase.getInstance().getReference().child("Users").child(userid).child("token").setValue(token).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {

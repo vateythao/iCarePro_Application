@@ -12,6 +12,7 @@
 
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -23,6 +24,12 @@
         android:theme="@style/Theme.ICare"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".medicineAlerts.AddMedicineActivity"
+            android:exported="false" />
+        <activity
+            android:name=".medicineAlerts.MedicineAlert"
+            android:exported="false" />
         <activity
             android:name=".virtualSigns.StartVitalSigns"
             android:exported="false" />
@@ -51,6 +58,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+        <receiver android:name=".medicineAlerts.AlarmBrodcast" />
     </application>
 
 </manifest>
