@@ -4,17 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.vat.icare.R;
 import com.vat.icare.databinding.ActivityMainBinding;
-import com.vat.icare.main.adapter.DoctorAdapter;
 import com.vat.icare.main.fragment.ChatFragment;
 import com.vat.icare.main.fragment.DoctorFragment;
 import com.vat.icare.main.fragment.ProfileFragment;
