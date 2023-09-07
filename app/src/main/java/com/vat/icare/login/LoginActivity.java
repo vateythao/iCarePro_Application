@@ -15,13 +15,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.vat.icare.MainActivity;
 import com.vat.icare.R;
 import com.vat.icare.databinding.ActivityLoginBinding;
+import com.vat.icare.main.MainActivity;
 import com.vat.icare.registration.RegistrationActivity;
 import com.vat.icare.utils.LoaderDialog;
 import com.vat.icare.virtualSigns.StartVitalSigns;
-import com.vat.icare.virtualSigns.VitalSignsProcess;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -77,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 loaderDialog.dismiss();
-                                Intent intent=new Intent(LoginActivity.this, StartVitalSigns.class);
+                                Intent intent=new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                //if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
                                //
@@ -87,7 +86,6 @@ public class LoginActivity extends AppCompatActivity {
                                //    FirebaseAuth.getInstance().signOut();
                                //}
                             } else {
-
                                 Log.d(TAG, "uploadToken failed: " + task.getException().getMessage());
                             }
                         }

@@ -3,11 +3,9 @@ package com.vat.icare.virtualSigns;
 import static java.lang.Math.ceil;
 import static java.lang.Math.sqrt;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -19,17 +17,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import com.google.common.net.InternetDomainName;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.vat.icare.MainActivity;
+import com.vat.icare.main.MainActivity;
 import com.vat.icare.R;
 import com.vat.icare.virtualSigns.Math.Fft;
 import com.vat.icare.virtualSigns.Math.Fft2;

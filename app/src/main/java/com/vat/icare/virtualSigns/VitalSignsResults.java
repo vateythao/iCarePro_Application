@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,12 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.vat.icare.MainActivity;
+import com.vat.icare.main.MainActivity;
 import com.vat.icare.R;
-import com.vat.icare.databinding.ActivityRegistrationBinding;
 import com.vat.icare.databinding.ActivityVitalSignsResultsBinding;
 import com.vat.icare.domin.VitalSignViewModel;
-import com.vat.icare.login.LoginViewModel;
 import com.vat.icare.utils.romDB.VitalSign;
 
 import java.text.DateFormat;

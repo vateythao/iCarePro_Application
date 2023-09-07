@@ -56,7 +56,7 @@
             android:name=".login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:exported="false" />
         <receiver android:name=".medicineAlerts.AlarmBrodcast" />
     </application>

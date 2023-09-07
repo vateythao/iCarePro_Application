@@ -15,7 +15,7 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.vat.icare.MainActivity;
+import com.vat.icare.main.MainActivity;
 import com.vat.icare.R;
 import com.vat.icare.databinding.ActivityAddMedicineBinding;
 
