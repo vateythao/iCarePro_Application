@@ -4,11 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import com.vat.icare.R;
 import com.vat.icare.databinding.ActivityMainBinding;
 import com.vat.icare.main.fragment.ChatFragment;
@@ -20,8 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
     Context context;
-
-
+    DoctorFragment doctors = new DoctorFragment();
+    ChatFragment chatFragment = new ChatFragment();
+    ProfileFragment profileFragment = new ProfileFragment();
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -29,13 +32,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         context = this;
-
-
-        DoctorFragment doctors = new DoctorFragment();
-        ChatFragment chatFragment = new ChatFragment();
-        ProfileFragment profileFragment = new ProfileFragment();
-
-        setCurrentFragment(doctors);
 
         binding.bottomNavigation.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -62,12 +58,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        doctors = new DoctorFragment();
+        chatFragment = new ChatFragment();
+        profileFragment = new ProfileFragment();
+
+        setCurrentFragment(doctors);
+
+    }
     public void setCurrentFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.mainContainerFrameLayout, fragment);
-        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-
 }

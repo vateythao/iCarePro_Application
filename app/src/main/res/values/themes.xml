@@ -2,15 +2,15 @@
     <!-- Base application theme. -->
     <style name="Theme.ICare" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/colorDarkTheme</item>
-        <item name="colorPrimaryVariant">@color/colorDarkTheme</item>
+        <item name="colorPrimary">@color/themeBlue</item>
+        <item name="colorPrimaryVariant">@color/themeBlue</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/colorBackGroundEdittext</item>
         <item name="colorSecondaryVariant">@color/colorBackGroundEdittext</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/themeBlue</item>
         <!-- Customize your theme here. -->
     </style>
 

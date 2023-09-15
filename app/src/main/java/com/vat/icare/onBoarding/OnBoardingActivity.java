@@ -41,7 +41,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         onBoardingData.add(
                 new OnBoardingData(
                         "Anytime,\n Anywhere!",
-                        ">User will be able to give you live, chat and meet\n with people nearby.",
+                        "User will be able to give you live, chat and meet\n with people nearby.",
                         R.drawable.ongoing_second
                 )
         );
