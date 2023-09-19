@@ -25,6 +25,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".doctor.DoctorDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".editProfile.EditProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".chats.PersonalChats"
             android:exported="false" />
         <activity

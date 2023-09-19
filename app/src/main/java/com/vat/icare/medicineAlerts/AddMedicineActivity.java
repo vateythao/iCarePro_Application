@@ -1,8 +1,5 @@
 package com.vat.icare.medicineAlerts;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
@@ -15,9 +12,12 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.vat.icare.main.MainActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+
 import com.vat.icare.R;
 import com.vat.icare.databinding.ActivityAddMedicineBinding;
+import com.vat.icare.main.MainActivity;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -39,7 +39,8 @@ public class AddMedicineActivity extends AppCompatActivity {
         binding.btnTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectTime();                                                                       //when we click on the choose time button it calls the select time method
+                selectTime();
+                //when we click on the choose time button it calls the select time method
             }
         });
 
@@ -47,28 +48,33 @@ public class AddMedicineActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectDate();
-            }                                        //when we click on the choose date button it calls the select date method
+                //when we click on the choose date button it calls the select date method
+                }
+
         });
 
         binding.btnSbumit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title = binding.editTitle.getText().toString().trim();                               //access the data form the input field
-                String date = binding.btnDate.getText().toString().trim();                                 //access the date form the choose date button
-                String time = binding.btnTime.getText().toString().trim();                                 //access the time form the choose time button
+                String title = binding.editTitle.getText().toString().trim();
+                //access the data form the input field
+                String date = binding.btnDate.getText().toString().trim();
+                //access the date form the choose date button
+                String time = binding.btnTime.getText().toString().trim();
+                //access the time form the choose time button
 
                 if (title.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Please Enter text", Toast.LENGTH_SHORT).show();   //shows the toast if input field is empty
+                    Toast.makeText(getApplicationContext(), "Please Enter text", Toast.LENGTH_SHORT).show();
+                    //shows the toast if input field is empty
                 } else {
-                    if (time.equals("time") || date.equals("date")) {                                               //shows toast if date and time are not selected
+                    if (time.equals("time") || date.equals("date")) {
+                        //shows toast if date and time are not selected
                         Toast.makeText(getApplicationContext(), "Please select date and time", Toast.LENGTH_SHORT).show();
                     } else {
                         processinsert(title, date, time);
 
                     }
                 }
-
-
             }
         });
     }
