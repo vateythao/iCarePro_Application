@@ -56,241 +56,250 @@
 
         </LinearLayout>
 
-        <TextView
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="20dp"
-            android:text="How are you today?"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/backgroun_result"
-            android:orientation="vertical">
-
+            android:layout_height="match_parent">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="30dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/heart" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="20dp"
+                    android:text="How are you today?"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_weight="0.5"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/backgroun_result"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="SYS"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_marginTop="30dp"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:src="@drawable/heart" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="20dp"
+                            android:layout_weight="0.5"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="SYS"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="mmHG"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/BP2V"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="0"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="mmHG"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_marginTop="50dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:src="@drawable/heart_thermo" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="20dp"
+                            android:layout_weight="0.5"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="DIA"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="mmHG"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/HRV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="0"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_marginTop="50dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:src="@drawable/heaty_actual" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="20dp"
+                            android:layout_weight="0.5"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="PULSE"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:hint="bmp"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/RRV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="0"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/usernameEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginTop="30dp"
+                        android:background="@drawable/background_edittext"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toBottomOf="@+id/txtConfirmPass"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <EditText
+                            android:id="@+id/edtSugar"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginEnd="12dp"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:gravity="center_vertical"
+                            android:hint="Enter Sugar"
+                            android:inputType="text"
+                            android:textColor="@color/black"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginBottom="30dp"
+                        android:layout_marginHorizontal="40dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnStartAgain"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_marginRight="10dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/button_possitive"
+                            android:gravity="center"
+                            android:text="Start Again"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white" />
+
+                        <Button
+                            android:id="@+id/btnSaveData"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="10dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/button_possitive"
+                            android:gravity="center"
+                            android:text="Save"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white" />
+
+                    </LinearLayout>
+
+
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/BP2V"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="@color/black"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
             </LinearLayout>
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="50dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/heart_thermo" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_weight="0.5"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="DIA"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="mmHG"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/HRV"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="@color/black"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="50dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/heaty_actual" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_weight="0.5"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="PULSE"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="bmp"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/RRV"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="@color/black"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/usernameEt"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/background_edittext"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/txtConfirmPass"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <EditText
-                    android:id="@+id/edtSugar"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:gravity="center_vertical"
-                    android:hint="Enter Sugar"
-                    android:inputType="text"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="30dp"
-                android:layout_marginHorizontal="40dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btnStartAgain"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginRight="10dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/button_possitive"
-                    android:gravity="center"
-                    android:text="Start Again"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white" />
-
-                <Button
-                    android:id="@+id/btnSaveData"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="10dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/button_possitive"
-                    android:gravity="center"
-                    android:text="Save"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white" />
-
-            </LinearLayout>
-
-
-        </LinearLayout>
-
+        </ScrollView>
 
     </LinearLayout>
 </layout>

@@ -53,7 +53,7 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardDocImg"
-            android:layout_width="140dp"
+            android:layout_width="120dp"
             android:layout_height="180dp"
             android:layout_marginStart="20dp"
             app:cardBackgroundColor="#D9D9D9"
@@ -75,9 +75,9 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="15dp"
             android:src="@drawable/ic_video_call"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imgAudioCall"
             app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
         <ImageView
@@ -85,9 +85,9 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginStart="15dp"
             android:src="@drawable/ic_telephone"
-            app:layout_constraintEnd_toStartOf="@+id/imgVideoCall"
+            app:layout_constraintStart_toEndOf="@+id/imgChat"
             app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
         <ImageView
@@ -95,9 +95,9 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginStart="15dp"
             android:src="@drawable/ic_chat"
-            app:layout_constraintEnd_toStartOf="@+id/imgAudioCall"
+            app:layout_constraintStart_toEndOf="@+id/cardDocImg"
             app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
         <TextView
@@ -108,7 +108,7 @@
             android:layout_marginTop="5dp"
             android:text="Dr. J Adamson"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardDocImg" />
@@ -121,194 +121,208 @@
             android:layout_marginTop="5dp"
             android:text="Sr. Heart"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtDocName" />
 
-        <LinearLayout
-            android:id="@+id/llDetails"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:orientation="horizontal"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtDoctorSpec">
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/imgPatent"
-                    android:layout_width="43dp"
-                    android:layout_height="43dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_group" />
-
-                <TextView
+                <LinearLayout
+                    android:id="@+id/llDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/imgPatent"
-                    android:gravity="center"
-                    android:text="Patent"
-                    android:textColor="@color/black" />
+                    android:layout_marginTop="30dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/imgPatent"
+                            android:layout_width="43dp"
+                            android:layout_height="43dp"
+                            android:layout_centerHorizontal="true"
+                            android:src="@drawable/ic_group" />
 
-                <ImageView
-                    android:id="@+id/imgExperience"
-                    android:layout_width="43dp"
-                    android:layout_height="43dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_user_experience" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/imgPatent"
+                            android:gravity="center"
+                            android:text="Patent"
+                            android:textColor="@color/black" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imgExperience"
+                            android:layout_width="43dp"
+                            android:layout_height="43dp"
+                            android:layout_centerHorizontal="true"
+                            android:src="@drawable/ic_user_experience" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/imgExperience"
+                            android:gravity="center"
+                            android:text="Experience"
+                            android:textColor="@color/black" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/imgRating"
+                            android:layout_width="43dp"
+                            android:layout_height="43dp"
+                            android:layout_centerHorizontal="true"
+                            android:src="@drawable/ic_rate" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/imgRating"
+                            android:gravity="center"
+                            android:text="Patent"
+                            android:textColor="@color/black" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llProfileDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/llDetails">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="2K"
+                            android:textColor="@color/black" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:background="@color/black" />
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="7 Years"
+                            android:textColor="@color/black" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:background="@color/black" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="4.3"
+                            android:textColor="@color/black" />
+
+
+                    </RelativeLayout>
+
+                </LinearLayout>
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/hintAbout"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/imgExperience"
-                    android:gravity="center"
-                    android:text="Experience"
-                    android:textColor="@color/black" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:id="@+id/imgRating"
-                    android:layout_width="43dp"
-                    android:layout_height="43dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_rate" />
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="About"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/llProfileDetails" />
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/txtAboutDoc"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/imgRating"
-                    android:gravity="center"
-                    android:text="Patent"
-                    android:textColor="@color/black" />
+                    android:layout_marginHorizontal="20dp"
+                    android:text="@string/lorem_ipsum"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/hintAbout" />
 
-            </RelativeLayout>
+                <Button
+                    android:id="@+id/btnBookAppointment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/button_possitive"
+                    android:paddingHorizontal="15dp"
+                    android:text="Book Appointment"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtAboutDoc" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/llProfileDetails"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/llDetails">
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="2K"
-                    android:textColor="@color/black" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:background="@color/black" />
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="7 Years"
-                    android:textColor="@color/black" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:background="@color/black" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="4.3"
-                    android:textColor="@color/black" />
-
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/hintAbout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:text="About"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/llProfileDetails" />
-
-        <TextView
-            android:id="@+id/txtAboutDoc"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:text="@string/lorem_ipsum"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hintAbout" />
-
-        <Button
-            android:id="@+id/btnBookAppointment"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/button_possitive"
-            android:paddingHorizontal="15dp"
-            android:text="Book Appointment"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtAboutDoc" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
