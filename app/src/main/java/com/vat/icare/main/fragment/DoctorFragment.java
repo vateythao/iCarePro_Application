@@ -23,7 +23,7 @@ public class DoctorFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentDoctorBinding.inflate(inflater, container, false);
         binding.getViewModel();
-        doctorAdapter = new DoctorAdapter();
+        doctorAdapter = new DoctorAdapter(getContext());
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         binding.recyclerViewDoctor.setLayoutManager(linearLayoutManager);

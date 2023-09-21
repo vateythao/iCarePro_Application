@@ -22,8 +22,6 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.Holder> {
         this.context = context;
     }
 
-    public DoctorAdapter() {
-    }
 
     @NonNull
     @Override
