@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.vat.icare.R;
+import com.vat.icare.calls.VideoCallActivity;
 import com.vat.icare.databinding.ActivityDoctorDetailsBinding;
 import com.vat.icare.medicineAlerts.AddMedicineActivity;
 
@@ -27,6 +28,14 @@ public class DoctorDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(context, AddMedicineActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        binding.imgVideoCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(context, VideoCallActivity.class);
                 startActivity(intent);
             }
         });

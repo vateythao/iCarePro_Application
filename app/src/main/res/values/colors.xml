@@ -25,7 +25,7 @@
     <color name="themeBlue">#00A3FF</color>
     <color name="logWarn">#fedd56</color>
     <color name="logError">#fe375f</color>
-    <color name="colorRedDark">#FF0000</color>
+    <color name="colorRedDark">#FF5353</color>
 
     <color name="stpi_default_circle_color">#b3bdc2</color>
     <color name="stpi_default_primary_color">#00b47c</color>
