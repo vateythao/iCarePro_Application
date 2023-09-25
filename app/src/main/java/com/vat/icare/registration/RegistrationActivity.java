@@ -1,25 +1,29 @@
 package com.vat.icare.registration;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -39,9 +43,17 @@ import com.vat.icare.databinding.ActivityRegistrationBinding;
 import com.vat.icare.login.LoginActivity;
 import com.vat.icare.login.LoginViewModel;
 import com.vat.icare.utils.LoaderDialog;
-import com.vat.icare.virtualSigns.VitalSignsProcess;
 
 import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.Period;
+import java.time.ZoneOffset;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +61,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private final String TAG = "CA/LoginActivity";
     String  base64;
     String  gender;
+    String  age;
     LoginViewModel loginViewModel;
     ActivityRegistrationBinding binding;
     LoaderDialog loaderDialog;
@@ -149,14 +162,22 @@ public class RegistrationActivity extends AppCompatActivity {
                     if(input.trim().equals(confirmpass)){
                         binding.llConfirmPassword.setBackgroundResource(R.drawable.valid_edittext);
                         binding.llPassword.setBackgroundResource(R.drawable.valid_edittext);
-                    }else {
+                    } else {
                         binding.llConfirmPassword.setBackgroundResource(R.drawable.error_edittext);
                         binding.llPassword.setBackgroundResource(R.drawable.error_edittext);
                     }
                 }
             }
-            public void afterTextChanged(Editable s) {}
 
+            public void afterTextChanged(Editable s) {
+            }
+
+        });
+        binding.edtAge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectDate();
+            }
         });
     }
 
@@ -204,6 +225,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
                     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
+
                     if (firebaseUser != null) {
                         String userid = firebaseUser.getUid();
                         Map map = new HashMap<>();
@@ -213,7 +235,8 @@ public class RegistrationActivity extends AppCompatActivity {
                         map.put("password", password);
                         map.put("height", binding.edtHeight.getText().toString().trim());
                         map.put("weight", binding.edtWeight.getText().toString().trim());
-                        map.put("age", binding.edtAge.getText().toString().trim());
+                        map.put("dob", binding.edtAge.getText().toString().trim());
+                        map.put("age", age);
                         map.put("gender", gender);
                         map.put("image", profileImage);
                         map.put("date", ServerValue.TIMESTAMP);
@@ -258,6 +281,14 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public int getAge(int year, int month, int dayOfMonth) {
+        return Period.between(
+                LocalDate.of(year, month, dayOfMonth),
+                LocalDate.now()
+        ).getYears();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -292,5 +323,25 @@ public class RegistrationActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void selectDate() {                                                                     //this method performs the date picker task
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                binding.edtAge.setText(year + "-" + (month + 1) + "-" + day);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                  age= String.valueOf(getAge(year, month+1,day));
+
+                }
+                //sets the selected date as test for button
+            }
+        }, year, month, day);
+        datePickerDialog.show();
     }
 }

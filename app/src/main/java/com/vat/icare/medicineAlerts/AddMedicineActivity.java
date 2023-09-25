@@ -80,27 +80,33 @@ public class AddMedicineActivity extends AppCompatActivity {
     }
 
     private void processinsert(String title, String date, String time) {
-        String result = new dbManager(this).addReminder(title, date, time);                  //inserts the title,date,time into sql lite database
-        setAlarm(title, date, time);                                                                //calls the set alarm method to set alarm
+        String result = new dbManager(this).addReminder(title, date, time);
+        //inserts the title,date,time into sql lite database
+        setAlarm(title, date, time);
+        //calls the set alarm method to set alarm
         binding.editTitle.setText("");
         Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
     }
 
-    private void selectTime() {                                                                     //this method performs the time picker task
+    private void selectTime() {
+        //this method performs the time picker task
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                timeTonotify = i + ":" + i1;                                                        //temp variable to store the time to set alarm
-                binding.btnTime.setText(FormatTime(i, i1));                                                //sets the button text as selected time
+                timeTonotify = i + ":" + i1;
+                //temp variable to store the time to set alarm
+                binding.btnTime.setText(FormatTime(i, i1));
+                //sets the button text as selected time
             }
         }, hour, minute, false);
         timePickerDialog.show();
     }
 
-    private void selectDate() {                                                                     //this method performs the date picker task
+    private void selectDate() {
+        //this method performs the date picker task
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -108,13 +114,15 @@ public class AddMedicineActivity extends AppCompatActivity {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                binding.btnDate.setText(day + "-" + (month + 1) + "-" + year);                             //sets the selected date as test for button
+                binding.btnDate.setText(day + "-" + (month + 1) + "-" + year);
+                //sets the selected date as test for button
             }
         }, year, month, day);
         datePickerDialog.show();
     }
 
-    public String FormatTime(int hour, int minute) {                                                //this method converts the time into 12hr farmat and assigns am or pm
+    public String FormatTime(int hour, int minute) {
+        //this method converts the time into 12hr farmat and assigns am or pm
 
         String time;
         time = "";
@@ -144,10 +152,12 @@ public class AddMedicineActivity extends AppCompatActivity {
 
 
     private void setAlarm(String text, String date, String time) {
-        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);                   //assigining alaram manager object to set alaram
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        //assigining alaram manager object to set alaram
 
         Intent intent = new Intent(getApplicationContext(), AlarmBrodcast.class);
-        intent.putExtra("event", text);                                                       //sending data to alarm class to create channel and notification
+        intent.putExtra("event", text);
+        //sending data to alarm class to create channel and notification
         intent.putExtra("time", date);
         intent.putExtra("date", time);
 
