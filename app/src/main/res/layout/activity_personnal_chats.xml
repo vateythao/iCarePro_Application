@@ -42,6 +42,7 @@
                     android:textStyle="bold" />
 
                 <ImageView
+                    android:id="@+id/imgVideoCalling"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="end"
@@ -78,7 +79,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/messageEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
@@ -90,6 +91,7 @@
                 android:textColorHint="@color/white" />
 
             <ImageButton
+                android:id="@+id/chat_send"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
@@ -102,4 +104,5 @@
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
