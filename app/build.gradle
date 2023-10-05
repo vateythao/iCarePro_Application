@@ -72,6 +72,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation 'com.google.firebase:firebase-messaging:23.2.0'
+    implementation 'com.firebaseui:firebase-ui-database:8.0.1'
     //https://github.com/square/picasso (Apache License 2.0)
     implementation 'com.squareup.okhttp:okhttp:2.5.0'
     implementation "com.google.firebase:firebase-iid:21.1.0"

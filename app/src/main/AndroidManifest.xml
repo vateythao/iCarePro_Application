@@ -16,15 +16,20 @@
 
     <application
         android:allowBackup="true"
-        android:hardwareAccelerated="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.ICare"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <activity android:name=".calls.InComingCallActivity"/>
+        <activity
+            android:name=".doctorRegistration.DoctorRegistration"
+            android:exported="false" />
         <activity
             android:name=".calls.AudioCallActivity"
             android:exported="false" />
@@ -77,7 +82,8 @@
 
         <receiver android:name=".medicineAlerts.AlarmBrodcast" />
 
-        <service android:name=".service.FirebaseMessagingService"
+        <service
+            android:name=".service.FirebaseMessagingService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

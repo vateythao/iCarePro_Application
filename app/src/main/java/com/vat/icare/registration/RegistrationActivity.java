@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -40,6 +41,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.vat.icare.R;
 import com.vat.icare.databinding.ActivityRegistrationBinding;
+import com.vat.icare.doctorRegistration.DoctorRegistration;
 import com.vat.icare.login.LoginActivity;
 import com.vat.icare.login.LoginViewModel;
 import com.vat.icare.utils.LoaderDialog;
@@ -65,6 +67,7 @@ public class RegistrationActivity extends AppCompatActivity {
     LoginViewModel loginViewModel;
     ActivityRegistrationBinding binding;
     LoaderDialog loaderDialog;
+    Context context;
     Uri uriPhoto;
     StorageReference storageReference;
     DatabaseReference databaseReference;
@@ -73,6 +76,7 @@ public class RegistrationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context=this;
         binding = DataBindingUtil.setContentView(this, R.layout.activity_registration);
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         loaderDialog = new LoaderDialog(this);
@@ -179,6 +183,13 @@ public class RegistrationActivity extends AppCompatActivity {
                 selectDate();
             }
         });
+        binding.llDoctor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(context, DoctorRegistration.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public boolean validation(){
@@ -280,7 +291,6 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
     }
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     public int getAge(int year, int month, int dayOfMonth) {
         return Period.between(

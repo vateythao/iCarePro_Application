@@ -9,10 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.vat.icare.R;
-
 public class AdapterChatting extends RecyclerView.Adapter<AdapterChatting.Holder> {
     Context context;
-
     public AdapterChatting(Context context) {
         this.context = context;
     }
