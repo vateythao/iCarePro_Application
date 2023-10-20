@@ -1,5 +1,6 @@
 package com.vat.icare.main.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -42,8 +43,9 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.Holder> {
         return new Holder(view);
     }
 
+    @SuppressLint("RecyclerView")
     @Override
-    public void onBindViewHolder(@NonNull DoctorAdapter.Holder holder, int position) {
+    public void onBindViewHolder(@NonNull DoctorAdapter.Holder holder,  int position) {
         holder.txtDocName.setText(dataItems.get(position).getName());
         holder.txtDocSpeciality.setText(dataItems.get(position).getSpeciality());
         byte[] imageAsBytes = Base64.decode(dataItems.get(position).getImage().getBytes(), Base64.DEFAULT);
@@ -52,6 +54,10 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.Holder> {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DoctorDetailsActivity.class);
+                intent.putExtra("userId",dataItems.get(position).getFirebaseId());
+                intent.putExtra("image",dataItems.get(position).getImage());
+                intent.putExtra("name",dataItems.get(position).getName());
+                intent.putExtra("speciality",dataItems.get(position).getSpeciality());
                 context.startActivity(intent);
             }
         });

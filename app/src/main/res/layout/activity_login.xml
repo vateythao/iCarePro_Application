@@ -146,21 +146,61 @@
                     app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/llDoctor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="30dp"
+                    android:orientation="vertical"
                     app:layout_constraintTop_toBottomOf="@+id/signUpTv">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Are you a Doctor? Login here"
+                        android:text="Are you a Doctor?"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
+                    <LinearLayout
+                        android:id="@+id/llSexAndGender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toBottomOf="@+id/llHandW">
+
+                        <RadioGroup
+                            android:id="@+id/rdGSelectionDoc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+
+                            <RadioButton
+                                android:id="@+id/rbNo"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="10dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/background_edittext"
+                                android:text="No" />
+
+                            <RadioButton
+                                android:id="@+id/rbYes"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/background_edittext"
+                                android:text="Yes" />
+
+
+                        </RadioGroup>
+
+                    </LinearLayout>
                 </LinearLayout>
 
                 <ProgressBar

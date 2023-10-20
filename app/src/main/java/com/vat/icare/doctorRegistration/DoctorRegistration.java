@@ -239,6 +239,7 @@ public class DoctorRegistration extends AppCompatActivity {
                                 map.put("certification", certification);
                                 map.put("name", nameFull);
                                 map.put("email", email);
+                                map.put("type", "Doctor");
                                 map.put("password", password);
                                 map.put("medicalDegree", medicalDegree);
                                 map.put("speciality", speciality);
@@ -246,7 +247,7 @@ public class DoctorRegistration extends AppCompatActivity {
                                 map.put("gender", gender);
                                 map.put("image", profileImage);
                                 map.put("date", ServerValue.TIMESTAMP);
-                                FirebaseDatabase.getInstance().getReference().child("Doctors").child(userid).setValue(map)
+                                FirebaseDatabase.getInstance().getReference().child("Users").child(userid).setValue(map)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {

@@ -1,9 +1,6 @@
-package com.vat.icare.chats;
+package com.vat.icare.doctor;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,6 +8,9 @@ import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,8 +29,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.vat.icare.R;
-import com.vat.icare.calls.VideoCallActivity;
-import com.vat.icare.databinding.ActivityPersonnalChatsBinding;
+import com.vat.icare.chats.MessageAdapter;
+import com.vat.icare.databinding.ActivityDoctorChattingBinding;
 import com.vat.icare.pojo.Message;
 
 import java.util.ArrayList;
@@ -40,42 +40,69 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class PersonalChats extends AppCompatActivity {
-    private final String TAG = "CA/PersonalChats";
-    ActivityPersonnalChatsBinding binding;
-    //Firebase Connection
+public class DoctorChattingActivity extends AppCompatActivity {
+
+    private final String TAG = "CA/ChatActivity";
+
+    // Will handle all changes happening in database
+
     private DatabaseReference userDatabase, chatDatabase;
     private ValueEventListener userListener, chatListener;
 
     // Will handle old/new messages between users
+
     private Query messagesDatabase;
     private ChildEventListener messagesListener;
 
     private MessageAdapter messagesAdapter;
     private final List<Message> messagesList = new ArrayList<>();
-    AdapterChatting adapterChatting;
-    Context context;
-    String currentUserId;
+
+    // User data
+
+    private String currentUserId;
+
+    // activity_chat views
+
+    private EditText messageEditText;
+    private ImageView chat_send;
+    TextView txtv_chatUserName;
+    ImageView backPressChat;
+
+    // Will be used on Notifications to detairminate if user has chat window open
+
     public static String otherUserId;
     public static boolean running = false;
+    ActivityDoctorChattingBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_personnal_chats);
-        context = this;
-        running = true;
-        adapterChatting = new AdapterChatting(context);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_doctor_chatting);
+
+        messageEditText = findViewById(R.id.input);
+        chat_send = findViewById(R.id.chat_send);
+
         otherUserId = getIntent().getStringExtra("useridFirebase");
+        String userName = getIntent().getStringExtra("userName");
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        binding.recyclerPersonal.setHasFixedSize(true);
-        binding.recyclerPersonal.setLayoutManager(new LinearLayoutManager(this));
+        binding.txtUserName.setText(userName);
+
+        binding.recyclerPersonalDoctor.setHasFixedSize(true);
+        binding.recyclerPersonalDoctor.setLayoutManager(new LinearLayoutManager(this));
 
         messagesAdapter = new MessageAdapter(messagesList);
 
-        binding.recyclerPersonal.setAdapter(messagesAdapter);
-        binding.messageEditText.addTextChangedListener(new TextWatcher() {
+        binding.recyclerPersonalDoctor.setAdapter(messagesAdapter);
+
+        chat_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessage();
+            }
+        });
+
+        messageEditText.addTextChangedListener(new TextWatcher() {
             private Timer timer = new Timer();
 
             @Override
@@ -121,22 +148,8 @@ public class PersonalChats extends AppCompatActivity {
             }
         });
 
-        binding.chatSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendMessage();
-            }
-        });
-        binding.imgVideoCalling.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PersonalChats.this, VideoCallActivity.class);
-                intent.putExtra("visiter_id", otherUserId);
-                startActivity(intent);
-
-            }
-        });
     }
+
 
     @Override
     protected void onResume() {
@@ -150,14 +163,18 @@ public class PersonalChats extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
         running = false;
+
         FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserId).child("online").setValue(ServerValue.TIMESTAMP);
 
-        if (messagesList.size() > 0 && binding.messageEditText.getText().length() > 0) {
+        if (messagesList.size() > 0 && messageEditText.getText().length() > 0) {
             FirebaseDatabase.getInstance().getReference().child("Chats").child(currentUserId).child(otherUserId).child("typing").setValue(0);
         }
+
         removeListeners();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -172,6 +189,51 @@ public class PersonalChats extends AppCompatActivity {
             final String notificationId = notificationRef.getKey();
 
             StorageReference file = FirebaseStorage.getInstance().getReference().child("message_images").child(messageId + ".jpg");
+
+//            file.putFile(url).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+//                    if (task.isSuccessful()) {
+//                        String imageUrl = task.getResult().getDownloadUrl().toString();
+//
+//                        Map messageMap = new HashMap();
+//                        messageMap.put("message", imageUrl);
+//                        messageMap.put("type", "image");
+//                        messageMap.put("from", currentUserId);
+//                        messageMap.put("to", otherUserId);
+//                        messageMap.put("timestamp", ServerValue.TIMESTAMP);
+//
+//                        HashMap<String, String> notificationData = new HashMap<>();
+//                        notificationData.put("from", currentUserId);
+//                        notificationData.put("type", "message");
+//
+//                        Map userMap = new HashMap();
+//                        userMap.put("Messages/" + currentUserId + "/" + otherUserId + "/" + messageId, messageMap);
+//                        userMap.put("Messages/" + otherUserId + "/" + currentUserId + "/" + messageId, messageMap);
+//
+//                        userMap.put("Chats/" + currentUserId + "/" + otherUserId + "/message", "You have sent a picture.");
+//                        userMap.put("Chats/" + currentUserId + "/" + otherUserId + "/timestamp", ServerValue.TIMESTAMP);
+//                        userMap.put("Chats/" + currentUserId + "/" + otherUserId + "/seen", ServerValue.TIMESTAMP);
+//
+//                        userMap.put("Chats/" + otherUserId + "/" + currentUserId + "/message", "Has send you a picture.");
+//                        userMap.put("Chats/" + otherUserId + "/" + currentUserId + "/timestamp", ServerValue.TIMESTAMP);
+//                        userMap.put("Chats/" + otherUserId + "/" + currentUserId + "/seen", 0);
+//
+//                        userMap.put("Notifications/" + otherUserId + "/" + notificationId, notificationData);
+//
+//                        FirebaseDatabase.getInstance().getReference().updateChildren(userMap, new DatabaseReference.CompletionListener() {
+//                            @Override
+//                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+//                                sendButton.setEnabled(true);
+//
+//                                if (databaseError != null) {
+//                                    Log.d(TAG, "sendMessage(): updateChildren failed: " + databaseError.getMessage());
+//                                }
+//                            }
+//                        });
+//                    }
+//                }
+//            });
         }
     }
 
@@ -188,10 +250,11 @@ public class PersonalChats extends AppCompatActivity {
                     String name = dataSnapshot.child("name").getValue().toString();
                     String image = dataSnapshot.child("image").getValue().toString();
 
-                    binding.txtUserName.setText(name);
+                    txtv_chatUserName.setText(name);
 
                     byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
-                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    // Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
                     final String online = dataSnapshot.child("online").getValue().toString();
 
                 } catch (Exception e) {
@@ -248,7 +311,7 @@ public class PersonalChats extends AppCompatActivity {
                     messagesList.add(message);
                     messagesAdapter.notifyDataSetChanged();
 
-                    binding.recyclerPersonal.scrollToPosition(messagesList.size() - 1);
+                    binding.recyclerPersonalDoctor.scrollToPosition(messagesList.size() - 1);
                 } catch (Exception e) {
                     Log.d(TAG, "loadMessages(): messegesListener exception: " + e.getMessage());
                 }
@@ -295,13 +358,13 @@ public class PersonalChats extends AppCompatActivity {
 
     private void sendMessage() {
 
-        String message = binding.messageEditText.getText().toString();
+        String message = messageEditText.getText().toString();
 
         if (message.length() == 0) {
             Toast.makeText(getApplicationContext(), "Message cannot be empty", Toast.LENGTH_SHORT).show();
 
         } else {
-            binding.messageEditText.setText("");
+            messageEditText.setText("");
 
             // Pushing message/notification so we can get keyIds
 
@@ -350,4 +413,5 @@ public class PersonalChats extends AppCompatActivity {
             });
         }
     }
+
 }

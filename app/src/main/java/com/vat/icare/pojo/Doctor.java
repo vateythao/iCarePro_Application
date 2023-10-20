@@ -1,21 +1,39 @@
 package com.vat.icare.pojo;
 
 public class Doctor {
-    private String token, name, speciality, gender,medicalDegree ,image;
+    private String token, name, speciality, gender,medicalDegree ,image, firebaseId, type;
     private long date;
 
     public Doctor() {
 
     }
 
-    public Doctor(String token, String name, String speciality, String gender, String medicalDegree, String image, long date) {
+    public Doctor(String token, String name, String speciality, String gender, String medicalDegree, String image, String firebaseId, String type, long date) {
         this.token = token;
         this.name = name;
         this.speciality = speciality;
         this.gender = gender;
         this.medicalDegree = medicalDegree;
         this.image = image;
+        this.firebaseId = firebaseId;
+        this.type = type;
         this.date = date;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getFirebaseId() {
+        return firebaseId;
+    }
+
+    public void setFirebaseId(String firebaseId) {
+        this.firebaseId = firebaseId;
     }
 
     public String getToken() {

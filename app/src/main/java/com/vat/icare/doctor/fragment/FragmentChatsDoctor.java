@@ -1,66 +1,69 @@
-package com.vat.icare.main.fragment;
+package com.vat.icare.doctor.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.vat.icare.databinding.FragmentDoctorBinding;
-import com.vat.icare.main.adapter.DoctorAdapter;
-import com.vat.icare.pojo.Doctor;
+import com.vat.icare.databinding.FragmentDoctorChatsBinding;
+import com.vat.icare.doctor.adapter.DoctorRecycler;
+import com.vat.icare.pojo.User;
 
 import java.util.ArrayList;
 
-public class DoctorFragment extends Fragment {
+public class FragmentChatsDoctor extends Fragment {
 
-    FragmentDoctorBinding binding;
-    DoctorAdapter doctorAdapter;
-    ArrayList<Doctor> dataItems = new ArrayList<>();
+    FragmentDoctorChatsBinding binding;
+    ArrayList<User> list = new ArrayList<>();
     FirebaseDatabase database;
-    public DoctorFragment() {
+    DoctorRecycler adapter;
+
+    public FragmentChatsDoctor() {
         // Required empty public constructor
     }
-    @SuppressLint("NotifyDataSetChanged")
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentDoctorBinding.inflate(inflater, container, false);
+        // Inflate the layout for this fragment
         database = FirebaseDatabase.getInstance();
-        binding.getViewModel();
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        binding.recyclerViewDoctor.setLayoutManager(layoutManager);
+        binding = FragmentDoctorChatsBinding.inflate(inflater, container, false);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        binding.chatRecyclerview.setLayoutManager(layoutManager);
+
         database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                dataItems.clear();
+                list.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Doctor doctors = dataSnapshot.getValue(Doctor.class);
-                    if (doctors != null) {
-                        String type = doctors.getType();
-                        doctors.setFirebaseId(dataSnapshot.getKey());
-                        if (!doctors.getFirebaseId().equals(FirebaseAuth.getInstance().getUid())) {
+                    User user = dataSnapshot.getValue(User.class);
+                    if (user != null) {
+                        String type = user.getType();
+                        user.setFirebaseId(dataSnapshot.getKey());
+                        if (!user.getFirebaseId().equals(FirebaseAuth.getInstance().getUid())) {
                             if(type!=null){
-                                if (type.equals("Doctor")) {
-                                    dataItems.add(doctors);
+                                if (type.equals("type")) {
+                                    list.add(user);
                                 }
                             }
                         }
                     }
                 }
-                doctorAdapter = new DoctorAdapter(getContext(), dataItems);
-                binding.recyclerViewDoctor.setAdapter(doctorAdapter);
-                doctorAdapter.notifyDataSetChanged();
+                adapter = new DoctorRecycler(list, getContext());
+                binding.chatRecyclerview.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -68,6 +71,8 @@ public class DoctorFragment extends Fragment {
 
             }
         });
+
+
         return binding.getRoot();
     }
 }

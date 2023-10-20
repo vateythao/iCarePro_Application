@@ -25,8 +25,13 @@
         android:theme="@style/Theme.ICare"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
-        <activity android:name=".calls.InComingCallActivity"/>
+        <activity
+            android:name=".doctor.DoctorChattingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".doctor.DoctorMainActivity"
+            android:exported="false" />
+        <activity android:name=".calls.InComingCallActivity" />
         <activity
             android:name=".doctorRegistration.DoctorRegistration"
             android:exported="false" />

@@ -2,7 +2,9 @@ package com.vat.icare.doctor;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.vat.icare.R;
 import com.vat.icare.calls.VideoCallActivity;
+import com.vat.icare.chats.PersonalChats;
 import com.vat.icare.databinding.ActivityDoctorDetailsBinding;
 import com.vat.icare.medicineAlerts.AddMedicineActivity;
 
@@ -24,6 +27,17 @@ public class DoctorDetailsActivity extends AppCompatActivity {
         context=this;
         binding = DataBindingUtil.setContentView(this, R.layout.activity_doctor_details);
 
+        String userId =getIntent().getStringExtra("userId");
+        String name = getIntent().getStringExtra("name");
+        String image = getIntent().getStringExtra("image");
+        String speciality = getIntent().getStringExtra("speciality");
+
+        byte[] imageAsBytes = Base64.decode(image.getBytes(), Base64.DEFAULT);
+        binding.imgDoctor.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
+
+        binding.txtDocName.setText(name);
+        binding.txtDoctorSpec.setText(speciality);
+
         binding.btnBookAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -36,6 +50,14 @@ public class DoctorDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(context, VideoCallActivity.class);
+                startActivity(intent);
+            }
+        });
+        binding.imgChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(context, DoctorChattingActivity.class);
+                intent.putExtra("useridFirebase",userId);
                 startActivity(intent);
             }
         });

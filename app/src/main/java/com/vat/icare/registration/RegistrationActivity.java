@@ -54,6 +54,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.Period;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -233,10 +234,7 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-
                     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-
                     if (firebaseUser != null) {
                         String userid = firebaseUser.getUid();
                         Map map = new HashMap<>();
@@ -244,6 +242,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         map.put("name", fullName);
                         map.put("email", email);
                         map.put("password", password);
+                        map.put("type", "User");
                         map.put("height", binding.edtHeight.getText().toString().trim());
                         map.put("weight", binding.edtWeight.getText().toString().trim());
                         map.put("dob", binding.edtAge.getText().toString().trim());
