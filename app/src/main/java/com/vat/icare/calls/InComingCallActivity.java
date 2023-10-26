@@ -18,10 +18,26 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 import com.vat.icare.R;
 import com.vat.icare.databinding.ActivityIncomingCallBinding;
 import com.vat.icare.main.MainActivity;
+
+// agora
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.view.SurfaceView;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.Toast;
+
+import io.agora.rtc2.Constants;
+import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.RtcEngineConfig;
+import io.agora.rtc2.video.VideoCanvas;
+import io.agora.rtc2.ChannelMediaOptions;
 
 import java.util.HashMap;
 
@@ -33,6 +49,31 @@ public class InComingCallActivity extends AppCompatActivity {
     private String calledProfilePic = "";
     private String caller_userid = "", caller_profile_pic = "", caller_username = "", detect_touch = "", outgoingId = "", incomingID = "";
     DatabaseReference userRef;
+
+    private static final int PERMISSION_REQ_ID = 22;
+    private static final String[] REQUESTED_PERMISSIONS =
+            {
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.CAMERA
+            };
+
+    private boolean checkSelfPermission()
+    {
+        if (ContextCompat.checkSelfPermission(this, REQUESTED_PERMISSIONS[0]) !=  PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, REQUESTED_PERMISSIONS[1]) !=  PackageManager.PERMISSION_GRANTED)
+        {
+            return false;
+        }
+        return true;
+    }
+    private int uid = 0;
+    private boolean isJoined = false;
+
+    private RtcEngine agoraEngine;
+    //SurfaceView to render local video in a Container.
+    private SurfaceView localSurfaceView;
+    //SurfaceView to render Remote video in a Container.
+    private SurfaceView remoteSurfaceView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +126,7 @@ public class InComingCallActivity extends AppCompatActivity {
                     calledUsername = snapshot.child(rec_userid).child("name").getValue().toString();
 
                     binding.calledUsername.setText(calledUsername);
-                    Picasso.get().load(calledProfilePic).into(binding.calledProfilePic);
+                    //Picasso.get().load(calledProfilePic).into(binding.calledProfilePic);
                 }
                 if (snapshot.child(caller_userid).exists()) {
                     calledProfilePic = snapshot.child(caller_userid).child("image").getValue().toString();

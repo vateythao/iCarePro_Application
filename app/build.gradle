@@ -15,7 +15,7 @@ android {
         minSdk 24
         targetSdk 33
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -59,6 +59,7 @@ dependencies {
         exclude group: 'androidx.appcompat', module: 'appcompat'
     }
     implementation 'com.google.code.gson:gson:2.10'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10'
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.10'
@@ -90,4 +91,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
     implementation "com.squareup.picasso:picasso:2.71828"
+    implementation 'com.firebaseui:firebase-ui-firestore:8.0.2'
+    implementation 'com.hbb20:ccp:2.5.0'
+    implementation 'io.agora.rtc:full-sdk:4.0.1'
+
+
 }

@@ -1,5 +1,7 @@
 package com.vat.icare.chats;
 
+import static com.vat.icare.utils.Utils.REF_CHATS;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,13 +35,23 @@ import com.vat.icare.R;
 import com.vat.icare.calls.VideoCallActivity;
 import com.vat.icare.databinding.ActivityPersonnalChatsBinding;
 import com.vat.icare.pojo.Message;
+import com.vat.icare.pojo.User;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.io.IOException;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 
 public class PersonalChats extends AppCompatActivity {
     private final String TAG = "CA/PersonalChats";
@@ -58,6 +71,7 @@ public class PersonalChats extends AppCompatActivity {
     String currentUserId;
     public static String otherUserId;
     public static boolean running = false;
+    private String strSender, strReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +82,8 @@ public class PersonalChats extends AppCompatActivity {
         adapterChatting = new AdapterChatting(context);
         otherUserId = getIntent().getStringExtra("useridFirebase");
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        strSender = currentUserId + "-" + otherUserId;
+        strReceiver = otherUserId + "-" + currentUserId;
 
         binding.recyclerPersonal.setHasFixedSize(true);
         binding.recyclerPersonal.setLayoutManager(new LinearLayoutManager(this));
@@ -158,6 +174,7 @@ public class PersonalChats extends AppCompatActivity {
         }
         removeListeners();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -238,7 +255,43 @@ public class PersonalChats extends AppCompatActivity {
         messagesList.clear();
         // Load/Update all messages between current and other user
 
-        messagesDatabase = FirebaseDatabase.getInstance().getReference().child("Messages").child(currentUserId).child(otherUserId);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(REF_CHATS).child(strReceiver);
+        reference.keepSynced(true);
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                messagesList.clear();
+                if (dataSnapshot.hasChildren()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        try {
+                            Message chat = snapshot.getValue(Message.class);
+                            assert chat != null;
+                            //if (!Utils.isEmpty(chat.getMessage())) {
+                            chat.setId(snapshot.getKey());
+                            messagesList.add(chat);
+                            //}
+
+                        } catch (Exception ignored) {
+                        }
+                    }
+                }
+                try {
+                    messagesAdapter.notifyDataSetChanged();
+
+                    binding.recyclerPersonal.scrollToPosition(messagesList.size() - 1);
+                } catch (Exception e) {
+                    Log.d(TAG, "loadMessages(): messegesListener exception: " + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        /*messagesDatabase = FirebaseDatabase.getInstance().getReference().child("Messages").child(currentUserId).child(otherUserId);
         messagesListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -274,7 +327,7 @@ public class PersonalChats extends AppCompatActivity {
                 Log.d(TAG, "loadMessages(): messegesListener failed: " + databaseError.getMessage());
             }
         };
-        messagesDatabase.addChildEventListener(messagesListener);
+        messagesDatabase.addChildEventListener(messagesListener);*/
     }
 
     private void removeListeners() {
@@ -299,55 +352,8 @@ public class PersonalChats extends AppCompatActivity {
 
         if (message.length() == 0) {
             Toast.makeText(getApplicationContext(), "Message cannot be empty", Toast.LENGTH_SHORT).show();
-
         } else {
             binding.messageEditText.setText("");
-
-            // Pushing message/notification so we can get keyIds
-
-            DatabaseReference userMessage = FirebaseDatabase.getInstance().getReference().child("Messages").child(currentUserId).child(otherUserId).push();
-            String pushId = userMessage.getKey();
-
-            DatabaseReference notificationRef = FirebaseDatabase.getInstance().getReference().child("Notifications").child(otherUserId).push();
-            String notificationId = notificationRef.getKey();
-
-            // "Packing" message
-
-            Map messageMap = new HashMap();
-            messageMap.put("message", message);
-            messageMap.put("type", "text");
-            messageMap.put("from", currentUserId);
-            messageMap.put("to", otherUserId);
-            messageMap.put("timestamp", ServerValue.TIMESTAMP);
-
-            HashMap<String, String> notificationData = new HashMap<>();
-            notificationData.put("from", currentUserId);
-            notificationData.put("type", "message");
-
-            Map userMap = new HashMap();
-            userMap.put("Messages/" + currentUserId + "/" + otherUserId + "/" + pushId, messageMap);
-            userMap.put("Messages/" + otherUserId + "/" + currentUserId + "/" + pushId, messageMap);
-
-            userMap.put("Chats/" + currentUserId + "/" + otherUserId + "/message", message);
-            userMap.put("Chats/" + currentUserId + "/" + otherUserId + "/timestamp", ServerValue.TIMESTAMP);
-            userMap.put("Chats/" + currentUserId + "/" + otherUserId + "/seen", ServerValue.TIMESTAMP);
-
-            userMap.put("Chats/" + otherUserId + "/" + currentUserId + "/message", message);
-            userMap.put("Chats/" + otherUserId + "/" + currentUserId + "/timestamp", ServerValue.TIMESTAMP);
-            userMap.put("Chats/" + otherUserId + "/" + currentUserId + "/seen", 0);
-
-            userMap.put("Notifications/" + otherUserId + "/" + notificationId, notificationData);
-
-            // Updating database with the new data including message, chat and notification
-
-            FirebaseDatabase.getInstance().getReference().updateChildren(userMap, new DatabaseReference.CompletionListener() {
-                @Override
-                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                    if (databaseError != null) {
-                        Log.d(TAG, "sendMessage(): updateChildren failed: " + databaseError.getMessage());
-                    }
-                }
-            });
         }
     }
 }

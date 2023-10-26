@@ -10,7 +10,7 @@
         android:id="@+id/profile_image_chat"
         android:layout_width="86dp"
         android:layout_height="71dp"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/ic_doctor"
         app:civ_border_color="#27CCA6"
         app:civ_border_width="2dp" />
 

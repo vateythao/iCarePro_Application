@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.vat.icare.R;
+import com.vat.icare.chats.fcm.SessionManager;
 import com.vat.icare.databinding.ActivityLoginBinding;
 import com.vat.icare.doctor.DoctorMainActivity;
 import com.vat.icare.main.MainActivity;
@@ -37,12 +38,16 @@ public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
     LoaderDialog loaderDialog;
 
+    private SessionManager sessionManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         loaderDialog = new LoaderDialog(this);
+
+        sessionManager = new SessionManager(this);
 
         binding.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +111,8 @@ public class LoginActivity extends AppCompatActivity {
                                         if (dataSnapshot.exists()) {
                                             String type = dataSnapshot.child("type").getValue(String.class);
                                             if(type!=null){
+                                                sessionManager.setIsLoginDone(true);
+                                                sessionManager.setLoginUserType(type);
                                                 if(type.equals("Doctor")){
                                                     Intent intent = new Intent(LoginActivity.this, DoctorMainActivity.class);
                                                     startActivity(intent);

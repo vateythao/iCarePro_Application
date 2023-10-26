@@ -1,4 +1,4 @@
-package com.vat.icare.doctor.adapter;
+package com.vat.icare.main.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,33 +20,33 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.vat.icare.R;
 import com.vat.icare.doctor.DoctorChattingActivity;
-import com.vat.icare.pojo.User;
+import com.vat.icare.pojo.Doctor;
 
 import java.util.ArrayList;
 
-public class DoctorRecycler extends RecyclerView.Adapter<DoctorRecycler.viewholder> {
+public class AdapterChatListUser extends RecyclerView.Adapter<AdapterChatListUser.viewholder> {
 
-    ArrayList<User> list;
+    ArrayList<Doctor> list;
     Context context;
 
-    public DoctorRecycler(ArrayList<User> list, Context context) {
+    public AdapterChatListUser(ArrayList<Doctor> list, Context context) {
         this.list = list;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterChatListUser.viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.samplechat_show, parent, false);
 
-        return new viewholder(view);
+        return new AdapterChatListUser.viewholder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull viewholder holder, int position) {
-        User useer = list.get(position);
+    public void onBindViewHolder(@NonNull AdapterChatListUser.viewholder holder, int position) {
+        Doctor useer = list.get(position);
         holder.username.setText(useer.getName());
-        if(useer.getImage()!=null){
+        if (useer.getImage() != null) {
             byte[] imageAsBytes = Base64.decode(useer.getImage().getBytes(), Base64.DEFAULT);
             holder.image.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
         }

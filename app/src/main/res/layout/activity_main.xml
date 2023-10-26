@@ -13,9 +13,146 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:elevation="6dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/themeBlue">
+
+            <View
+                android:id="@+id/actionDoctorMenu"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/actionBpHeart"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/actionBpHeart"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/actionChat"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/actionDoctorMenu"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/actionChat"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/actionProfile"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/actionBpHeart"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/actionProfile"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/actionChat"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivDoctorMenu"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_doctor"
+                app:layout_constraintBottom_toTopOf="@+id/tvDoctorMenu"
+                app:layout_constraintEnd_toEndOf="@+id/actionDoctorMenu"
+                app:layout_constraintStart_toStartOf="@+id/actionDoctorMenu"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/tvDoctorMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Doctor's"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/ivDoctorMenu"
+                app:layout_constraintStart_toStartOf="@+id/ivDoctorMenu"
+                app:layout_constraintTop_toBottomOf="@+id/ivDoctorMenu" />
+
+            <ImageView
+                android:id="@+id/ivBpHeart"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/heart_bottom"
+                app:layout_constraintBottom_toTopOf="@+id/tvBpHeart"
+                app:layout_constraintEnd_toEndOf="@+id/actionBpHeart"
+                app:layout_constraintStart_toStartOf="@+id/actionBpHeart"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/tvBpHeart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BP/Heart"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/ivBpHeart"
+                app:layout_constraintStart_toStartOf="@+id/ivBpHeart"
+                app:layout_constraintTop_toBottomOf="@+id/ivBpHeart" />
+
+            <ImageView
+                android:id="@+id/ivChat"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_chat"
+                app:layout_constraintBottom_toTopOf="@+id/tvChat"
+                app:layout_constraintEnd_toEndOf="@+id/actionChat"
+                app:layout_constraintStart_toStartOf="@+id/actionChat"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/tvChat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chat's"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/ivChat"
+                app:layout_constraintStart_toStartOf="@+id/ivChat"
+                app:layout_constraintTop_toBottomOf="@+id/ivChat" />
+
+            <ImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_man"
+                app:layout_constraintBottom_toTopOf="@+id/tvProfile"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/actionProfile"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/tvProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/ivProfile"
+                app:layout_constraintStart_toStartOf="@+id/ivProfile"
+                app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottomNavigation"

@@ -55,6 +55,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.Holder> {
             public void onClick(View view) {
                 Intent intent = new Intent(context, DoctorDetailsActivity.class);
                 intent.putExtra("userId",dataItems.get(position).getFirebaseId());
+                intent.putExtra("token",dataItems.get(position).getToken());
                 intent.putExtra("image",dataItems.get(position).getImage());
                 intent.putExtra("name",dataItems.get(position).getName());
                 intent.putExtra("speciality",dataItems.get(position).getSpeciality());

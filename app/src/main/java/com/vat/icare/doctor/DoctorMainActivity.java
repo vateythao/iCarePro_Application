@@ -46,6 +46,7 @@ public class DoctorMainActivity extends AppCompatActivity {
                         if (!user.getFirebaseId().equals(FirebaseAuth.getInstance().getUid())) {
                           if(type!=null){
                               if (type.equals("User")) {
+                                  user.setFirebaseId(dataSnapshot.getKey());
                                   list.add(user);
                               }
                           }

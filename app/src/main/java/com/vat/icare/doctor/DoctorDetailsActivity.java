@@ -12,7 +12,6 @@ import androidx.databinding.DataBindingUtil;
 
 import com.vat.icare.R;
 import com.vat.icare.calls.VideoCallActivity;
-import com.vat.icare.chats.PersonalChats;
 import com.vat.icare.databinding.ActivityDoctorDetailsBinding;
 import com.vat.icare.medicineAlerts.AddMedicineActivity;
 
@@ -27,7 +26,8 @@ public class DoctorDetailsActivity extends AppCompatActivity {
         context=this;
         binding = DataBindingUtil.setContentView(this, R.layout.activity_doctor_details);
 
-        String userId =getIntent().getStringExtra("userId");
+        String userId = getIntent().getStringExtra("userId");
+        String DoctorToken = getIntent().getStringExtra("token");
         String name = getIntent().getStringExtra("name");
         String image = getIntent().getStringExtra("image");
         String speciality = getIntent().getStringExtra("speciality");
@@ -37,11 +37,17 @@ public class DoctorDetailsActivity extends AppCompatActivity {
 
         binding.txtDocName.setText(name);
         binding.txtDoctorSpec.setText(speciality);
+        binding.imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         binding.btnBookAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(context, AddMedicineActivity.class);
+                Intent intent = new Intent(context, AddMedicineActivity.class);
                 startActivity(intent);
             }
         });
@@ -56,8 +62,10 @@ public class DoctorDetailsActivity extends AppCompatActivity {
         binding.imgChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(context, DoctorChattingActivity.class);
-                intent.putExtra("useridFirebase",userId);
+                Intent intent = new Intent(context, DoctorChattingActivity.class);
+                intent.putExtra("useridFirebase", userId);
+                intent.putExtra("userTokenFirebase", DoctorToken);
+                intent.putExtra("userName", name);
                 startActivity(intent);
             }
         });
