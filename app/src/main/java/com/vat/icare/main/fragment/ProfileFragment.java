@@ -85,7 +85,7 @@ public class ProfileFragment extends Fragment {
 
         if (currentUser != null) {
             String userId = currentUser.getUid();
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
 
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -100,7 +100,7 @@ public class ProfileFragment extends Fragment {
                         String imgUser = user.getImage();
                         binding.txtUserName.setText(username);
                         binding.txtEmailId.setText(email);
-                        if(!imgUser.equals("")){
+                        if(imgUser!=null){
                             byte[] imageAsBytes = Base64.decode(imgUser.getBytes(), Base64.DEFAULT);
                             binding.imgUser.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
                         }
