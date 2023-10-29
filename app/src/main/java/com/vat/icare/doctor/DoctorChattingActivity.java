@@ -33,6 +33,7 @@ import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
 import com.vat.icare.R;
 import com.vat.icare.calls.VideoCallActivity;
 import com.vat.icare.chats.MessageAdapter;
@@ -64,6 +65,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -224,7 +226,7 @@ public class DoctorChattingActivity extends AppCompatActivity {
          * Code block for fetching Current USer Data
          * */
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(currentUserId);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -232,16 +234,16 @@ public class DoctorChattingActivity extends AppCompatActivity {
                     if (sessionManager.loginUserType().equals("Doctor")) {
                         final Doctor mDoc = snapshot.getValue(Doctor.class);
                         if (mDoc != null) {
-                            mDoc.setFirebaseId(firebaseUser.getUid());
+                            mDoc.setFirebaseId(currentUserId);
                             doctor = mDoc;
-                            Log.v("FIREBASE_USER_DATA", "CurrentUSer Doctor"+mDoc.getName());
+                            Log.v("FIREBASE_USER_DATA", "CurrentUSer Doctor" + mDoc.getName());
                         }
                     } else {
                         final User mUser = snapshot.getValue(User.class);
                         if (mUser != null) {
-                            mUser.setFirebaseId(firebaseUser.getUid());
+                            mUser.setFirebaseId(currentUserId);
                             user = mUser;
-                            Log.v("FIREBASE_USER_DATA", "CurrentUSer USER"+mUser.getName());
+                            Log.v("FIREBASE_USER_DATA", "CurrentUSer USER" + mUser.getName());
                         }
                     }
                 }
@@ -260,20 +262,20 @@ public class DoctorChattingActivity extends AppCompatActivity {
         otherUserReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.hasChildren()){
+                if (snapshot.hasChildren()) {
                     if (sessionManager.loginUserType().equals("Doctor")) {
                         final User mUser = snapshot.getValue(User.class);
                         if (mUser != null) {
-                            mUser.setFirebaseId(firebaseUser.getUid());
+                            mUser.setFirebaseId(currentUserId);
                             user = mUser;
-                            Log.v("FIREBASE_USER_DATA", "OtherUSer USER"+mUser.getName());
+                            Log.v("FIREBASE_USER_DATA", "OtherUSer USER" + mUser.getName());
                         }
                     } else {
                         final Doctor mDoc = snapshot.getValue(Doctor.class);
                         if (mDoc != null) {
-                            mDoc.setFirebaseId(firebaseUser.getUid());
+                            mDoc.setFirebaseId(currentUserId);
                             doctor = mDoc;
-                            Log.v("FIREBASE_USER_DATA", "OtherUSer Doctor"+mDoc.getName());
+                            Log.v("FIREBASE_USER_DATA", "OtherUSer Doctor" + mDoc.getName());
                         }
                     }
                 }
@@ -581,21 +583,11 @@ public class DoctorChattingActivity extends AppCompatActivity {
             reference.child(REF_CHATS).child(strReceiver).child(key).setValue(messageMap);
 
             try {
-                //sendNotification("Notification", message, "user");
+                sendNotification("Notification", message, "user");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
 
-            // Updating database with the new data including message, chat and notification
-
-            /*FirebaseDatabase.getInstance().getReference().updateChildren(userMap, new DatabaseReference.CompletionListener() {
-                @Override
-                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                    if (databaseError != null) {
-                        Log.d(TAG, "sendMessage(): updateChildren failed: " + databaseError.getMessage());
-                    }
-                }
-            });*/
         }
     }
 
@@ -603,16 +595,27 @@ public class DoctorChattingActivity extends AppCompatActivity {
 
         final Data data = new Data(currentUserId, R.drawable.ic_message_text, username, message, getString(R.string.strNewMessage), otherUserId, type);
 
-        final Sender sender = new Sender(data, otherUserToken);
+        final Sender sender = new Sender(data, data, otherUserToken);
 
-        apiService.sendNotification(sender).enqueue(new Callback<MyResponse>() {
+        String json = new Gson().toJson(sender);
+        Log.e(TAG, "sendNotification: " + json);
+
+        apiService.sendNotification(sender).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(@NotNull Call<MyResponse> call, @NotNull Response<MyResponse> response) {
-                assert response.code() != 200 || response.body() != null;
+            public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        String b = response.body().string();
+                        Log.e(TAG, "onResponse: " + b);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                //assert response.code() != 200 || response.body() != null;
             }
 
             @Override
-            public void onFailure(@NotNull Call<MyResponse> call, @NotNull Throwable t) {
+            public void onFailure(@NotNull Call<ResponseBody> call, @NotNull Throwable t) {
 
             }
         });
@@ -637,5 +640,4 @@ public class DoctorChattingActivity extends AppCompatActivity {
             }
         });*/
     }
-
 }
