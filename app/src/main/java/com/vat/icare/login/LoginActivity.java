@@ -1,14 +1,20 @@
 package com.vat.icare.login;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -33,12 +39,22 @@ import com.vat.icare.utils.LoaderDialog;
 public class LoginActivity extends AppCompatActivity {
 
     private final String TAG = "CA/LoginActivity";
-    String doctor="";
+    String doctor = "";
     LoginViewModel loginViewModel;
     ActivityLoginBinding binding;
     LoaderDialog loaderDialog;
 
     private SessionManager sessionManager;
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    Toast.makeText(this, "Notifications permission granted", Toast.LENGTH_SHORT)
+                            .show();
+                } else {
+                    Toast.makeText(this, "FCM can't post notifications without DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION permission",
+                            Toast.LENGTH_LONG).show();
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         loaderDialog = new LoaderDialog(this);
+        askNotificationPermission();
 
         sessionManager = new SessionManager(this);
 
@@ -116,9 +133,11 @@ public class LoginActivity extends AppCompatActivity {
                                                 if(type.equals("Doctor")){
                                                     Intent intent = new Intent(LoginActivity.this, DoctorMainActivity.class);
                                                     startActivity(intent);
+                                                    finish();
                                                 }else {
                                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                                     startActivity(intent);
+                                                    finish();
                                                 }
                                             }
                                         }
@@ -133,13 +152,26 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.d(TAG, "uploadToken failed: " + task.getException().getMessage());
                             }
                         }
-                    });
+                            });
                 } else {
                     loaderDialog.dismiss();
                     Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
+
+    private void askNotificationPermission() {
+        // This is only necessary for API Level > 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                // FCM SDK (and your app) can post notifications.
+            } else {
+                // Directly ask for the permission
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
     }
 
 }

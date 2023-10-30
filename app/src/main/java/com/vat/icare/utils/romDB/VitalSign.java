@@ -15,14 +15,16 @@ public class VitalSign {
     int heart_rate;
     int sugar;
     int pulse;
+    String date;
 
-    public VitalSign(@NonNull String name, int bloodP_sys, int bloodP_dia, int heart_rate, int sugar, int pulse) {
+    public VitalSign(@NonNull String name, int bloodP_sys, int bloodP_dia, int heart_rate, int sugar, int pulse, String date) {
         this.name = name;
         this.bloodP_sys = bloodP_sys;
         this.bloodP_dia = bloodP_dia;
         this.heart_rate = heart_rate;
         this.sugar = sugar;
         this.pulse = pulse;
+        this.date = date;
     }
 
     public int getId() {
@@ -36,6 +38,14 @@ public class VitalSign {
     @NonNull
     public String getName() {
         return name;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public void setName(@NonNull String name) {

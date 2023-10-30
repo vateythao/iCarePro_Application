@@ -35,6 +35,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.vat.icare.R;
+import com.vat.icare.calls.InComingCallActivity;
 import com.vat.icare.calls.VideoCallActivity;
 import com.vat.icare.chats.MessageAdapter;
 import com.vat.icare.chats.PersonalChats;
@@ -130,7 +131,7 @@ public class DoctorChattingActivity extends AppCompatActivity {
         binding.imgVideoCalling.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DoctorChattingActivity.this, VideoCallActivity.class);
+                Intent intent = new Intent(DoctorChattingActivity.this, InComingCallActivity.class);
                 intent.putExtra("visiter_id", otherUserId);
                 startActivity(intent);
             }
@@ -327,51 +328,6 @@ public class DoctorChattingActivity extends AppCompatActivity {
             final String notificationId = notificationRef.getKey();
 
             StorageReference file = FirebaseStorage.getInstance().getReference().child("message_images").child(messageId + ".jpg");
-
-//            file.putFile(url).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-//                    if (task.isSuccessful()) {
-//                        String imageUrl = task.getResult().getDownloadUrl().toString();
-//
-//                        Map messageMap = new HashMap();
-//                        messageMap.put("message", imageUrl);
-//                        messageMap.put("type", "image");
-//                        messageMap.put("from", currentUserId);
-//                        messageMap.put("to", otherUserId);
-//                        messageMap.put("timestamp", ServerValue.TIMESTAMP);
-//
-//                        HashMap<String, String> notificationData = new HashMap<>();
-//                        notificationData.put("from", currentUserId);
-//                        notificationData.put("type", "message");
-//
-//                        Map userMap = new HashMap();
-//                        userMap.put("Messages/" + currentUserId + "/" + otherUserId + "/" + messageId, messageMap);
-//                        userMap.put("Messages/" + otherUserId + "/" + currentUserId + "/" + messageId, messageMap);
-//
-//                        userMap.put("Chats/" + currentUserId + "/" + otherUserId + "/message", "You have sent a picture.");
-//                        userMap.put("Chats/" + currentUserId + "/" + otherUserId + "/timestamp", ServerValue.TIMESTAMP);
-//                        userMap.put("Chats/" + currentUserId + "/" + otherUserId + "/seen", ServerValue.TIMESTAMP);
-//
-//                        userMap.put("Chats/" + otherUserId + "/" + currentUserId + "/message", "Has send you a picture.");
-//                        userMap.put("Chats/" + otherUserId + "/" + currentUserId + "/timestamp", ServerValue.TIMESTAMP);
-//                        userMap.put("Chats/" + otherUserId + "/" + currentUserId + "/seen", 0);
-//
-//                        userMap.put("Notifications/" + otherUserId + "/" + notificationId, notificationData);
-//
-//                        FirebaseDatabase.getInstance().getReference().updateChildren(userMap, new DatabaseReference.CompletionListener() {
-//                            @Override
-//                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-//                                sendButton.setEnabled(true);
-//
-//                                if (databaseError != null) {
-//                                    Log.d(TAG, "sendMessage(): updateChildren failed: " + databaseError.getMessage());
-//                                }
-//                            }
-//                        });
-//                    }
-//                }
-//            });
         }
     }
 
@@ -436,9 +392,6 @@ public class DoctorChattingActivity extends AppCompatActivity {
     }
 
     private void loadMessages() {
-        // Load/Update all messages between current and other user
-
-        //DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference(REF_CHATS).child(strReceiver);
         reference.keepSynced(true);
 
@@ -475,43 +428,6 @@ public class DoctorChattingActivity extends AppCompatActivity {
             }
         });
 
-        /*messagesDatabase = FirebaseDatabase.getInstance().getReference().child("Messages").child(currentUserId).child(otherUserId);
-        messagesListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                try {
-                    Message message = dataSnapshot.getValue(Message.class);
-
-                    messagesList.add(message);
-                    messagesAdapter.notifyDataSetChanged();
-
-                    binding.recyclerPersonalDoctor.scrollToPosition(messagesList.size() - 1);
-                } catch (Exception e) {
-                    Log.d(TAG, "loadMessages(): messegesListener exception: " + e.getMessage());
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                messagesAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                messagesAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                messagesAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(TAG, "loadMessages(): messegesListener failed: " + databaseError.getMessage());
-            }
-        };
-        messagesDatabase.addChildEventListener(messagesListener);*/
     }
 
     private void removeListeners() {
@@ -563,21 +479,6 @@ public class DoctorChattingActivity extends AppCompatActivity {
             notificationData.put("from", currentUserId);
             notificationData.put("type", "message");
 
-            /*Map userMap = new HashMap();
-            userMap.put("Messages/" + currentUserId + "/" + otherUserId + "/" + pushId, messageMap);
-            userMap.put("Messages/" + otherUserId + "/" + currentUserId + "/" + pushId, messageMap);
-
-            userMap.put("Chats/" + currentUserId + "/" + otherUserId + "/message", message);
-            userMap.put("Chats/" + currentUserId + "/" + otherUserId + "/timestamp", ServerValue.TIMESTAMP);
-            userMap.put("Chats/" + currentUserId + "/" + otherUserId + "/seen", ServerValue.TIMESTAMP);
-
-            userMap.put("Chats/" + otherUserId + "/" + currentUserId + "/message", message);
-            userMap.put("Chats/" + otherUserId + "/" + currentUserId + "/timestamp", ServerValue.TIMESTAMP);
-            userMap.put("Chats/" + otherUserId + "/" + currentUserId + "/seen", 0);
-
-            userMap.put("Notifications/" + otherUserId + "/" + notificationId, notificationData);*/
-
-
             final String key = Utils.getChatUniqueId();
             reference.child(REF_CHATS).child(strSender).child(key).setValue(messageMap);
             reference.child(REF_CHATS).child(strReceiver).child(key).setValue(messageMap);
@@ -620,24 +521,5 @@ public class DoctorChattingActivity extends AppCompatActivity {
             }
         });
 
-        /*DatabaseReference tokenRef = FirebaseDatabase.getInstance().getReference(REF_TOKENS);
-        Query query = tokenRef.orderByKey().equalTo(receiver);*/
-
-        /*query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChildren()) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });*/
     }
 }

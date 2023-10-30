@@ -59,8 +59,6 @@ public class PersonalChats extends AppCompatActivity {
     //Firebase Connection
     private DatabaseReference userDatabase, chatDatabase;
     private ValueEventListener userListener, chatListener;
-
-    // Will handle old/new messages between users
     private Query messagesDatabase;
     private ChildEventListener messagesListener;
 
@@ -290,44 +288,6 @@ public class PersonalChats extends AppCompatActivity {
 
             }
         });
-
-        /*messagesDatabase = FirebaseDatabase.getInstance().getReference().child("Messages").child(currentUserId).child(otherUserId);
-        messagesListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                try {
-                    Message message = dataSnapshot.getValue(Message.class);
-
-                    messagesList.add(message);
-                    messagesAdapter.notifyDataSetChanged();
-
-                    binding.recyclerPersonal.scrollToPosition(messagesList.size() - 1);
-                } catch (Exception e) {
-                    Log.d(TAG, "loadMessages(): messegesListener exception: " + e.getMessage());
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                messagesAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                messagesAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                messagesAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(TAG, "loadMessages(): messegesListener failed: " + databaseError.getMessage());
-            }
-        };
-        messagesDatabase.addChildEventListener(messagesListener);*/
     }
 
     private void removeListeners() {

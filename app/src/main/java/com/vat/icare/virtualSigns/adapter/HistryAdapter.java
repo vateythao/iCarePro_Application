@@ -1,5 +1,6 @@
 package com.vat.icare.virtualSigns.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ public class HistryAdapter extends RecyclerView.Adapter<HistryAdapter.Holder> {
         return new Holder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull HistryAdapter.Holder holder, int position) {
         String pulse = String.valueOf(items.get(position).getPulse());
@@ -37,11 +39,12 @@ public class HistryAdapter extends RecyclerView.Adapter<HistryAdapter.Holder> {
         String sugar = String.valueOf(items.get(position).getSugar());
         String sys = String.valueOf(items.get(position).getBloodP_sys());
 
-        holder.txtPulse.setText(pulse);
-        holder.txtDIA.setText(dia);
+        holder.BP2V.setText(sys+"/"+dia);
+        holder.HRV.setText(dia);
+        holder.RRV.setText(pulse);
         holder.txtSugar.setText(sugar);
-        holder.txtSYS.setText(sys);
-        holder.txtDIA.setText(dia);
+
+        holder.txtDate.setText("Dated: "+items.get(position).getDate());
 
     }
 
@@ -51,19 +54,21 @@ public class HistryAdapter extends RecyclerView.Adapter<HistryAdapter.Holder> {
     }
 
     public static class Holder extends RecyclerView.ViewHolder {
-        TextView txtSYS;
-        TextView txtDIA;
-        TextView txtPulse;
+        TextView BP2V;
+        TextView HRV;
+        TextView RRV;
         TextView txtSugar;
-        TextView txtBloodPressureRate;
+        TextView txtDate;
+
 
         public Holder(@NonNull @NotNull View itemView) {
             super(itemView);
-            this.txtSYS = itemView.findViewById(R.id.txtSYS);
-            this.txtDIA = itemView.findViewById(R.id.txtDIA);
-            this.txtPulse = itemView.findViewById(R.id.txtPulse);
-            this.txtBloodPressureRate = itemView.findViewById(R.id.txtBloodPressureRate);
+            this.BP2V = itemView.findViewById(R.id.BP2V);
+            this.HRV = itemView.findViewById(R.id.HRV);
+            this.RRV = itemView.findViewById(R.id.RRV);
             this.txtSugar = itemView.findViewById(R.id.txtSugar);
+            this.txtDate = itemView.findViewById(R.id.txtDate);
+
         }
     }
 }

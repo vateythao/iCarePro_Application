@@ -305,15 +305,6 @@ public class MessageHolder extends RecyclerView.ViewHolder {
                                     });
                         }
                     });
-
-//            messageTextPictureLeft.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent intent = new Intent(context, FullScreenActivity.class);
-//                    intent.putExtra("imageUrl", message);
-//                    context.startActivity(intent);
-//                }
-//            });
         }
         messageTimeLeft.setText(DateUtils.isToday(time) ? new SimpleDateFormat("HH:mm", Locale.getDefault()).format(time) : new SimpleDateFormat("MMM d, HH:mm", Locale.getDefault()).format(time));
 

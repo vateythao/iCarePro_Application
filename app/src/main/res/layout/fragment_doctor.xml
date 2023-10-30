@@ -206,26 +206,6 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/historyBP"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="10dp"
-            android:text="BP/Heart History"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/llCatList" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerBPHistory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/historyBP" />
-
-        <TextView
             android:id="@+id/docList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -235,7 +215,7 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerBPHistory" />
+            app:layout_constraintTop_toBottomOf="@+id/llCatList" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewDoctor"

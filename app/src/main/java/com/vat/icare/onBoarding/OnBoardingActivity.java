@@ -54,6 +54,7 @@ public class OnBoardingActivity extends AppCompatActivity {
                     intent = new Intent(OnBoardingActivity.this, MainActivity.class);
                 }
                 startActivity(intent);
+                finish();
             }else {
                 onBoardingScreenData();
             }
