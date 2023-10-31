@@ -61,7 +61,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="98dp"
-                android:layout_toRightOf="@id/img_cutcall"
+                android:layout_toRightOf="@id/decline_call"
                 android:background="@drawable/circle_white"
                 android:padding="10dp"
                 android:src="@drawable/baseline_videocam"

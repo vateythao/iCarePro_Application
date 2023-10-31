@@ -35,13 +35,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.vat.icare.R;
-import com.vat.icare.calls.InComingCallActivity;
 import com.vat.icare.calls.VideoCallActivity;
 import com.vat.icare.chats.MessageAdapter;
-import com.vat.icare.chats.PersonalChats;
 import com.vat.icare.chats.fcm.APIService;
 import com.vat.icare.chats.fcm.Data;
-import com.vat.icare.chats.fcm.MyResponse;
 import com.vat.icare.chats.fcm.RetroClient;
 import com.vat.icare.chats.fcm.Sender;
 import com.vat.icare.chats.fcm.SessionManager;
@@ -52,7 +49,6 @@ import com.vat.icare.pojo.User;
 import com.vat.icare.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,10 +58,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -131,7 +123,8 @@ public class DoctorChattingActivity extends AppCompatActivity {
         binding.imgVideoCalling.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DoctorChattingActivity.this, InComingCallActivity.class);
+                sendMessage("Calling");
+                Intent intent = new Intent(DoctorChattingActivity.this, VideoCallActivity.class);
                 intent.putExtra("visiter_id", otherUserId);
                 startActivity(intent);
             }
@@ -490,6 +483,42 @@ public class DoctorChattingActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    private void sendMessage(String message) {
+        // Pushing message/notification so we can get keyIds
+
+        DatabaseReference userMessage = FirebaseDatabase.getInstance().getReference().child("Messages").child(currentUserId).child(otherUserId).push();
+        String pushId = userMessage.getKey();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
+        DatabaseReference notificationRef = FirebaseDatabase.getInstance().getReference().child("Notifications").child(otherUserId).push();
+        String notificationId = notificationRef.getKey();
+
+        // "Packing" message
+
+        Map messageMap = new HashMap();
+        messageMap.put("message", message);
+        messageMap.put("type", "text");
+        messageMap.put("from", currentUserId);
+        messageMap.put("to", otherUserId);
+        messageMap.put("timestamp", ServerValue.TIMESTAMP);
+
+        HashMap<String, String> notificationData = new HashMap<>();
+        notificationData.put("from", currentUserId);
+        notificationData.put("type", "message");
+
+        final String key = Utils.getChatUniqueId();
+        reference.child(REF_CHATS).child(strSender).child(key).setValue(messageMap);
+        reference.child(REF_CHATS).child(strReceiver).child(key).setValue(messageMap);
+
+        try {
+            sendNotification("Notification Calling", message, "user");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     private void sendNotification(final String username, final String message, final String type) {

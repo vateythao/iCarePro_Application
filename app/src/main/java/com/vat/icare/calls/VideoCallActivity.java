@@ -1,208 +1,186 @@
 package com.vat.icare.calls;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-
-import android.content.Context;
-import android.content.Intent;
-import android.opengl.GLSurfaceView;
-import android.os.Bundle;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.opentok.android.OpentokError;
-import com.opentok.android.Publisher;
-import com.opentok.android.PublisherKit;
-import com.opentok.android.Session;
-import com.opentok.android.Stream;
-import com.opentok.android.Subscriber;
-import com.vat.icare.R;
-import com.vat.icare.databinding.ActivityVideoCallBinding;
-import com.vat.icare.main.MainActivity;
-
 import android.Manifest;
-import android.util.Log;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import com.vat.icare.R;
+import com.vat.icare.chats.media.RtcTokenBuilder2;
+import com.vat.icare.databinding.ActivityVideoCallBinding;
+import io.agora.rtc2.ChannelMediaOptions;
+import io.agora.rtc2.Constants;
+import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.RtcEngineConfig;
+import io.agora.rtc2.video.VideoCanvas;
 
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
-
-public class VideoCallActivity extends AppCompatActivity implements Session.SessionListener, PublisherKit.PublisherListener {
+public class VideoCallActivity extends AppCompatActivity {
     ActivityVideoCallBinding binding;
     Context context;
     private static final String LOG_TAG = VideoCallActivity.class.getSimpleName();
-    private static final int RC_VIDEO_APP_PERM = 124;
-    private static String API_KEY = "47800761";
-    private static String SESSION_ID = "2_MX40NzgwMDc2MX5-MTY5ODY4NDAzMjg0OH5Db3Evd29XVDExRzREa0U5UVQ0NlJ5aW5-fn4";
-    private static String TOKEN = "T1==cGFydG5lcl9pZD00NzgwMDc2MSZzaWc9OTIyOGFlYzcxNDNjZTQ5ODg2NTcyNDZkYTQwODA0YjU3ZDVjZTJlMTpzZXNzaW9uX2lkPTJfTVg0ME56Z3dNRGMyTVg1LU1UWTVPRFk0TkRBek1qZzBPSDVEYjNFdmQyOVhWREV4UnpSRWEwVTVVVlEwTmxKNWFXNS1mbjQmY3JlYXRlX3RpbWU9MTY5ODY4NDA1MiZub25jZT0wLjkzMTA4NDc3MjA5MDczNDMmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTcwMTI3NjA1MSZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ==";
+    // Fill the App ID of your project generated on Agora Console.
+    private final String appId = "caae4abb903349e890872ea2edf59feb";
+    // Fill the channel name.
+    private String channelName = "iCarePro";
+    // Fill the temp token generated on Agora Console.
+    private String token = null;
+    private String appCertificate = "55a68d6c33ff4fdfab540f05e53a1cd0";
+    // An integer that identifies the local user.
+    private int uid = 0;
+    private boolean isJoined = false;
 
-    private Session mSession;
-    private Publisher mPublisher;
-    private Subscriber mSubscriber;
-    private ImageView cancel_call_btn;
-    private FrameLayout mPublisherView;
-    private FrameLayout mSubscriberView;
+    private RtcEngine agoraEngine;
+    //SurfaceView to render local video in a Container.
+    private SurfaceView localSurfaceView;
+    //SurfaceView to render Remote video in a Container.
+    private SurfaceView remoteSurfaceView;
 
-    private DatabaseReference userref;
-    private String userID = "";
+    private static final int PERMISSION_REQ_ID = 22;
+    private static final String[] REQUESTED_PERMISSIONS =
+            {
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.CAMERA
+            };
+
+    private boolean checkSelfPermission() {
+        if (ContextCompat.checkSelfPermission(this, REQUESTED_PERMISSIONS[0]) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, REQUESTED_PERMISSIONS[1]) != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        }
+        return true;
+    }
+
+    void showMessage(String message) {
+        runOnUiThread(() ->
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show());
+    }
+
+    private void setupVideoSDKEngine() {
+        try {
+            RtcEngineConfig config = new RtcEngineConfig();
+            config.mContext = getBaseContext();
+            config.mAppId = appId;
+            config.mEventHandler = mRtcEventHandler;
+            agoraEngine = RtcEngine.create(config);
+            // By default, the video module is disabled, call enableVideo to enable it.
+            agoraEngine.enableVideo();
+        } catch (Exception e) {
+            showMessage(e.toString());
+        }
+    }
+
+    private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() {
+        @Override
+        // Listen for the remote host joining the channel to get the uid of the host.
+        public void onUserJoined(int uid, int elapsed) {
+            showMessage("Remote user joined ");
+
+            // Set the remote video view
+            runOnUiThread(() -> setupRemoteVideo(uid));
+        }
+
+        @Override
+        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
+            isJoined = true;
+            showMessage("Joined Channel ");
+        }
+
+        @Override
+        public void onUserOffline(int uid, int reason) {
+            showMessage("Remote user offline " + uid + " " + reason);
+            runOnUiThread(() -> remoteSurfaceView.setVisibility(View.GONE));
+        }
+    };
+
+    private void setupRemoteVideo(int uid) {
+        FrameLayout container = findViewById(R.id.remote_video_view_container);
+        remoteSurfaceView = new SurfaceView(getBaseContext());
+        remoteSurfaceView.setZOrderMediaOverlay(true);
+        container.addView(remoteSurfaceView);
+        agoraEngine.setupRemoteVideo(new VideoCanvas(remoteSurfaceView, VideoCanvas.RENDER_MODE_FIT, uid));
+        // Display RemoteSurfaceView.
+        remoteSurfaceView.setVisibility(View.VISIBLE);
+    }
+
+    private void setupLocalVideo() {
+        FrameLayout container = findViewById(R.id.local_video_view_container);
+        // Create a SurfaceView object and add it as a child to the FrameLayout.
+        localSurfaceView = new SurfaceView(getBaseContext());
+        container.addView(localSurfaceView);
+        // Call setupLocalVideo with a VideoCanvas having uid set to 0.
+        agoraEngine.setupLocalVideo(new VideoCanvas(localSurfaceView, VideoCanvas.RENDER_MODE_HIDDEN, 0));
+    }
+
+    public void joinChannel(View view) {
+        if (checkSelfPermission()) {
+            ChannelMediaOptions options = new ChannelMediaOptions();
+
+            // For a Video call, set the channel profile as COMMUNICATION.
+            options.channelProfile = Constants.CHANNEL_PROFILE_COMMUNICATION;
+            // Set the client role as BROADCASTER or AUDIENCE according to the scenario.
+            options.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER;
+            // Display LocalSurfaceView.
+            setupLocalVideo();
+            localSurfaceView.setVisibility(View.VISIBLE);
+            // Start local preview.
+            agoraEngine.startPreview();
+            // Join the channel with a temp token.
+            // You need to specify the user ID yourself, and ensure that it is unique in the channel.
+            agoraEngine.joinChannel(token, channelName, uid, options);
+        } else {
+            Toast.makeText(getApplicationContext(), "Permissions was not granted", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void leaveChannel(View view) {
+        if (!isJoined) {
+            showMessage("Join a channel first");
+        } else {
+            agoraEngine.leaveChannel();
+            showMessage("You left the Call");
+            // Stop remote video rendering.
+            if (remoteSurfaceView != null) remoteSurfaceView.setVisibility(View.GONE);
+            // Stop local video rendering.
+            if (localSurfaceView != null) localSurfaceView.setVisibility(View.GONE);
+            isJoined = false;
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_video_call);
-        context=this;
-        userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        userref = FirebaseDatabase.getInstance().getReference().child("name");
-
-        binding.imgCutcall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                userref.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                        if (snapshot.child(userID).hasChild("Incoming")) {
-                            userref.child(userID).child("Incoming").removeValue();
-
-                            if (mPublisher != null) {
-                                mPublisher.destroy();
-                            }
-                            if (mSubscriber != null) {
-                                mSubscriber.destroy();
-                            }
-                        }
-
-                        if (snapshot.child(userID).hasChild("Outgoing")) {
-                            userref.child(userID).child("Outgoing").removeValue();
-
-                            if (mPublisher != null) {
-                                mPublisher.destroy();
-                            }
-                            if (mSubscriber != null) {
-                                mSubscriber.destroy();
-                            }
-                        }
-                        startActivity(new Intent(VideoCallActivity.this, MainActivity.class));
-                        finish();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
-        });
-
-        requestPermission();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, VideoCallActivity.this);
-
-    }
-
-    @AfterPermissionGranted(RC_VIDEO_APP_PERM)
-    private void requestPermission() {
-        String[] perms = {Manifest.permission.INTERNET, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
-
-        if (EasyPermissions.hasPermissions(this, perms)) {
-            //Initialize The Stream
-            mPublisherView = findViewById(R.id.jisne_call_kiya_hai_container);
-            mSubscriberView = findViewById(R.id.jisko_call_kiya_hai_container);
-
-            mSession = new com.opentok.android.Session.Builder(this, API_KEY, SESSION_ID).build();
-            mSession.setSessionListener(VideoCallActivity.this);
-            mSession.connect(TOKEN);
-
-
-        } else {
-            EasyPermissions.requestPermissions(this, "MIC and Camera Permissions Required to Access the App", RC_VIDEO_APP_PERM, perms);
+        context = this;
+        RtcTokenBuilder2 tokenBuilder = new RtcTokenBuilder2();
+        int timeStamp = (int) (System.currentTimeMillis() / 1000 + 300);
+        token = tokenBuilder.buildTokenWithUid(
+                appId, appCertificate, channelName, uid, RtcTokenBuilder2.Role.ROLE_PUBLISHER, timeStamp, timeStamp);
+        if (!checkSelfPermission()) {
+            ActivityCompat.requestPermissions(this, REQUESTED_PERMISSIONS, PERMISSION_REQ_ID);
         }
-
+        setupVideoSDKEngine();
     }
 
-    @Override
-    public void onStreamCreated(PublisherKit publisherKit, Stream stream) {
+    protected void onDestroy() {
+        super.onDestroy();
+        agoraEngine.stopPreview();
+        agoraEngine.leaveChannel();
 
+        // Destroy the engine in a sub-thread to avoid congestion
+        new Thread(() -> {
+            RtcEngine.destroy();
+            agoraEngine = null;
+        }).start();
     }
 
-    @Override
-    public void onStreamDestroyed(PublisherKit publisherKit, Stream stream) {
-
-    }
-
-    @Override
-    public void onError(PublisherKit publisherKit, OpentokError opentokError) {
-
-    }
-
-    @Override
-    public void onConnected(com.opentok.android.Session session) {
-        //Publish The Stream to the Session
-        Log.d(LOG_TAG, "Session Connected");
-        mPublisher = new Publisher.Builder(this).build();
-        mPublisher.setPublisherListener(VideoCallActivity.this);
-
-        mPublisherView.addView(mPublisher.getView());
-
-        if (mPublisher.getView() instanceof GLSurfaceView) {
-            ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
-        }
-
-        mSession.publish(mPublisher);
-
-    }
-
-    @Override
-    public void onDisconnected(com.opentok.android.Session session) {
-
-    }
-
-    @Override
-    public void onStreamReceived(com.opentok.android.Session session, Stream stream) {
-        //Receiver Receiving the Stream
-        Log.d(LOG_TAG, "Session Received");
-
-        if (mSubscriber == null) {
-            mSubscriber = new com.opentok.android.Subscriber.Builder(this, stream).build();
-            mSession.subscribe(mSubscriber);
-            mSubscriberView.addView(mSubscriber.getView());
-            cancel_call_btn.setVisibility(View.VISIBLE);
-
-        }
-
-    }
-
-    @Override
-    public void onStreamDropped(com.opentok.android.Session session, Stream stream) {
-        Log.d(LOG_TAG, "Session Dropped");
-
-        if (mSubscriber != null) {
-            mSubscriber = null;
-            mSubscriberView.removeAllViews();
-        }
-
-    }
-
-    @Override
-    public void onError(com.opentok.android.Session session, OpentokError opentokError) {
-
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
 }

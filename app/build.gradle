@@ -77,7 +77,6 @@ dependencies {
     //https://github.com/square/picasso (Apache License 2.0)
     implementation 'com.squareup.okhttp:okhttp:2.5.0'
     implementation "com.google.firebase:firebase-iid:21.1.0"
-    implementation 'com.opentok.android:opentok-android-sdk:2.20.1'
     implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
     //RoomDb
     implementation "androidx.room:room-ktx:2.5.2"
@@ -93,7 +92,8 @@ dependencies {
     implementation "com.squareup.picasso:picasso:2.71828"
     implementation 'com.firebaseui:firebase-ui-firestore:8.0.2'
     implementation 'com.hbb20:ccp:2.5.0'
-    implementation 'pub.devrel:easypermissions:3.0.0'
+    implementation 'io.agora.rtc:full-sdk:4.0.1'
+    implementation "commons-codec:commons-codec:1.11"
 
 
 }

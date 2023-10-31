@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -22,8 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.vat.icare.R;
+import com.vat.icare.calls.VideoCallActivity;
 import com.vat.icare.doctor.DoctorChattingActivity;
-import com.vat.icare.main.MainActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -73,40 +74,71 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void showNotification(String msgBody, String name, String image) {
-        Intent intent;
 
-        intent = new Intent(this, DoctorChattingActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if (msgBody.equals("Calling")) {
+            // Call Notification
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+            MediaPlayer mp = MediaPlayer.create(getApplicationContext(), notification);
+            mp.start();
+            Intent intent = new Intent(this, VideoCallActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                    PendingIntent.FLAG_IMMUTABLE);
 
-        final PendingIntent pendingIntent;
-        pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_IMMUTABLE);
+            final String channelId = getString(R.string.default_notification_channel_id);
 
-        final String channelId = getString(R.string.default_notification_channel_id);
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId);
+            notificationBuilder
+                    .setSmallIcon(R.mipmap.ic_launcher_foreground)
+                    .setContentTitle(name + " Calling")
+                    .setAutoCancel(true)
+                    .setSound(notification)
+                    .setContentIntent(pendingIntent);
 
-        final Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId);
-        notificationBuilder
-                .setSmallIcon(R.mipmap.ic_launcher_foreground)
-                .setContentTitle(name+" Send Message")
-                .setContentText(msgBody)
-                .setTicker(msgBody)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
+            // Since android Oreo notification channel is needed.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                final NotificationChannel channel = new NotificationChannel(channelId,
+                        "Call Notification", NotificationManager.IMPORTANCE_DEFAULT);
+                channel.setShowBadge(true);
+                notificationManager.createNotificationChannel(channel);
+            }
+            notificationManager.notify((int) new Date().getTime(), notificationBuilder.build());
+        } else {
+            // Message Notification
+            Intent intent = new Intent(this, DoctorChattingActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            final PendingIntent pendingIntent;
+            pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                    PendingIntent.FLAG_IMMUTABLE);
 
-        final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            final String channelId = getString(R.string.default_notification_channel_id);
 
-        // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            final NotificationChannel channel = new NotificationChannel(channelId,
-                    "Chat Notification", NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setShowBadge(true);
-            notificationManager.createNotificationChannel(channel);
+            final Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId);
+            notificationBuilder
+                    .setSmallIcon(R.mipmap.ic_launcher_foreground)
+                    .setContentTitle(name + " Send Message")
+                    .setContentText(msgBody)
+                    .setTicker(msgBody)
+                    .setAutoCancel(true)
+                    .setSound(defaultSoundUri)
+                    .setContentIntent(pendingIntent);
+
+            final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+            // Since android Oreo notification channel is needed.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                final NotificationChannel channel = new NotificationChannel(channelId,
+                        "Chat Notification", NotificationManager.IMPORTANCE_DEFAULT);
+                channel.setShowBadge(true);
+                notificationManager.createNotificationChannel(channel);
+            }
+
+            notificationManager.notify((int) new Date().getTime(), notificationBuilder.build());
         }
-
-        notificationManager.notify((int) new Date().getTime(), notificationBuilder.build());
     }
 
     private String strGroups = "";
