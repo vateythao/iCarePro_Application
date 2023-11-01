@@ -63,6 +63,7 @@
                     android:id="@+id/imgAudioCall"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:visibility="invisible"
                     android:layout_alignParentEnd="true"
                     android:layout_gravity="end"
                     android:src="@drawable/ic_telephone"
