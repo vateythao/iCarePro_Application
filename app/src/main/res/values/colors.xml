@@ -12,6 +12,9 @@
     <color name="colorfacebook">#4267B2</color>
     <color name="colorApple">#B3B3B3</color>
     <color name="colorText">#8D8D93</color>
+    <color name="redCastIndia">#D81F26</color>
+    <color name="ShadowColor">#93262a</color>
+    <color name="colorTextHint">#FFFFFFFF</color>
     <color name="colorGreen">#45C467</color>
     <color name="colorDarkGreen">#2EAA3A</color>
     <color name="colorback">#E6EBF1</color>

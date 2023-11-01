@@ -58,8 +58,8 @@ public class ProfileFragment extends Fragment {
         binding.txtEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getContext(), EditProfileActivity.class);
-                startActivity(intent);
+                //Intent intent=new Intent(getContext(), EditProfileActivity.class);
+                //startActivity(intent);
             }
         });
 

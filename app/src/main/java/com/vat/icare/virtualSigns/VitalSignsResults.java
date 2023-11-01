@@ -79,22 +79,28 @@ public class VitalSignsResults extends AppCompatActivity {
             public void onClick(View view) {
                 int sugar = Integer.parseInt(binding.edtSugar.getText().toString());
                 int pulse = Integer.parseInt(binding.RRV.getText().toString());
+
+                if(String.valueOf(sugar).isEmpty()){
+                    Toast.makeText(context, "No data is available to save", Toast.LENGTH_SHORT).show();
+                }
                 VitalSign vitalSign = new VitalSign(userName, VBP1, VBP2, VRR,
                         sugar, pulse, dateToday);
                 viewModel.insertStudent(vitalSign);
                 Toast.makeText(context, "Completed", Toast.LENGTH_SHORT).show();
-                binding.BP2V.setText("");
-                binding.HRV.setText("");
-                binding.RRV.setText("");
-                binding.edtSugar.setText("");
                 recreate();
             }
         });
         binding.txtHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(context,HistoryActivity.class);
+                Intent intent = new Intent(context, HistoryActivity.class);
                 startActivity(intent);
+            }
+        });
+        binding.imgBackFromVital.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }

@@ -5,64 +5,62 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.vat.icare.databinding.FragmentDoctorChatsBinding;
-import com.vat.icare.doctor.adapter.DoctorRecycler;
-import com.vat.icare.pojo.User;
+import com.vat.icare.appointmentBooking.AdapterBooking;
+import com.vat.icare.databinding.FragmentBookingBinding;
+import com.vat.icare.main.adapter.AdapterChatListUser;
+import com.vat.icare.main.adapter.DoctorAdapter;
+import com.vat.icare.pojo.Booking;
+import com.vat.icare.pojo.Doctor;
 
 import java.util.ArrayList;
 
-public class FragmentChatsDoctor extends Fragment {
-
-    FragmentDoctorChatsBinding binding;
-    ArrayList<User> list = new ArrayList<>();
+public class BookingFragment extends Fragment {
+    FragmentBookingBinding binding;
+    private String strSender, strReceiver,currentUserId;
+    ArrayList<Booking> list = new ArrayList<>();
     FirebaseDatabase database;
-    DoctorRecycler adapter;
+    AdapterBooking adapter;
 
-    public FragmentChatsDoctor() {
+    public BookingFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        binding = FragmentBookingBinding.inflate(inflater, container, false);
         database = FirebaseDatabase.getInstance();
-
-        binding = FragmentDoctorChatsBinding.inflate(inflater, container, false);
+        currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        binding.chatRecyclerview.setLayoutManager(layoutManager);
-        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
+        binding.recyclerViewBooking.setLayoutManager(layoutManager);
+
+        database.getReference().child("Bookings").addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 list.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    User user = dataSnapshot.getValue(User.class);
-                    if (user != null) {
-                        String type = user.getType();
-                        user.setFirebaseId(dataSnapshot.getKey());
-                        if (!user.getFirebaseId().equals(FirebaseAuth.getInstance().getUid())) {
-                            if(type!=null){
-                                if (type.equals("User")) {
-                                    user.setFirebaseId(dataSnapshot.getKey());
-                                    list.add(user);
-                                }
-                            }
+                    Booking doctors = dataSnapshot.getValue(Booking.class);
+                    if (doctors != null) {
+                        doctors.setFirebaseId(dataSnapshot.getKey());
+                        if (!doctors.getFirebaseId().equals(FirebaseAuth.getInstance().getUid())) {
+                            list.add(doctors);
                         }
                     }
                 }
-                adapter = new DoctorRecycler(list, binding.getRoot().getContext());
-                binding.chatRecyclerview.setAdapter(adapter);
+                adapter = new AdapterBooking(getContext(),list);
+                binding.recyclerViewBooking.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
 
@@ -70,7 +68,6 @@ public class FragmentChatsDoctor extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-
 
         return binding.getRoot();
     }

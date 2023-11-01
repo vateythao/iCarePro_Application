@@ -102,7 +102,7 @@ public class DoctorChattingActivity extends AppCompatActivity {
     private String strSender, strReceiver;
 
      Doctor doctor;
-    private User user;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

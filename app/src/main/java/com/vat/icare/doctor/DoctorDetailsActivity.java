@@ -11,9 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.vat.icare.R;
+import com.vat.icare.appointmentBooking.AppointmentBookingActivity;
 import com.vat.icare.calls.VideoCallActivity;
 import com.vat.icare.databinding.ActivityDoctorDetailsBinding;
-import com.vat.icare.medicineAlerts.AddMedicineActivity;
 
 public class DoctorDetailsActivity extends AppCompatActivity {
 
@@ -47,7 +47,12 @@ public class DoctorDetailsActivity extends AppCompatActivity {
         binding.btnBookAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, AddMedicineActivity.class);
+                Intent intent = new Intent(context, AppointmentBookingActivity.class);
+                intent.putExtra("userId",userId);
+                intent.putExtra("token",DoctorToken);
+                intent.putExtra("image",image);
+                intent.putExtra("name",name);
+                intent.putExtra("speciality",speciality);
                 startActivity(intent);
             }
         });

@@ -35,7 +35,7 @@ public class HistryAdapter extends RecyclerView.Adapter<HistryAdapter.Holder> {
     @Override
     public void onBindViewHolder(@NonNull HistryAdapter.Holder holder, int position) {
         String pulse = String.valueOf(items.get(position).getPulse());
-        String dia = String.valueOf(items.get(position).getHeart_rate());
+        String dia = String.valueOf(items.get(position).getBloodP_dia());
         String sugar = String.valueOf(items.get(position).getSugar());
         String sys = String.valueOf(items.get(position).getBloodP_sys());
 
@@ -44,7 +44,7 @@ public class HistryAdapter extends RecyclerView.Adapter<HistryAdapter.Holder> {
         holder.RRV.setText(pulse);
         holder.txtSugar.setText(sugar);
 
-        holder.txtDate.setText("Dated: "+items.get(position).getDate());
+        holder.txtDate.setText("Date: "+items.get(position).getDate());
 
     }
 
