@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
         doctors = new DoctorFragment();
         chatFragment = new ChatFragment();
         profileFragment = new ProfileFragment();
-
         setCurrentFragment(doctors);
 
     }

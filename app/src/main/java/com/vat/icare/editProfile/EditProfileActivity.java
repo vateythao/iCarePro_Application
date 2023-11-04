@@ -1,16 +1,152 @@
 package com.vat.icare.editProfile;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
+import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.vat.icare.R;
+import com.vat.icare.databinding.ActivityEditProfileBinding;
+import com.vat.icare.pojo.User;
+
+import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
 
 public class EditProfileActivity extends AppCompatActivity {
+    String base64;
+
+    ActivityEditProfileBinding binding;
+    DatabaseReference databaseReference;
+    String currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile);
+        binding= DataBindingUtil.setContentView(this, R.layout.activity_edit_profile);
+
+        FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        currentUser=currentFirebaseUser.getUid();
+
+        if (currentUser != null) {
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(currentUser);
+
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    // Retrieve user data
+                    User user = dataSnapshot.getValue(User.class);
+                    // Use the user data as needed
+                    if (user != null) {
+                        String username = user.getName();
+                        String email = user.getEmail();
+                        base64 = user.getImage();
+                        binding.edtProfileName.setText(username);
+                        binding.edtEmailEdit.setText(email);
+                        if(base64!=null){
+                            byte[] imageAsBytes = Base64.decode(base64.getBytes(), Base64.DEFAULT);
+                            binding.imgUser.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Handle error
+                }
+            });
+        }
+
+        binding.btnSaveProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name=binding.edtProfileName.getText().toString();
+                updatedata(name,base64);
+            }
+        });
+        binding.imgEditProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                // ******** code for crop image
+                i.putExtra("crop", "true");
+                i.putExtra("aspectX", 356);
+                i.putExtra("aspectY", 356);
+                i.putExtra("outputX", 356);
+                i.putExtra("outputY", 356);
+                try {
+                    i.putExtra("return-data", true);
+                    startActivityForResult(
+                            Intent.createChooser(i, "Select Picture"), 0);
+                } catch (ActivityNotFoundException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void updatedata(String userName, String image) {
+
+        HashMap User = new HashMap();
+        User.put("name",userName);
+        User.put("image",image);
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+        databaseReference.child(currentUser).updateChildren(User).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                Toast.makeText(EditProfileActivity.this,"Successfully Updated",Toast.LENGTH_SHORT).show();
+                finish();
+
+            }else {
+                Toast.makeText(EditProfileActivity.this,"Failed to Update",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+            try {
+                Bundle bundle = data.getExtras();
+                Bitmap bitmap = bundle.getParcelable("data");
+
+                Bitmap bmp = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.PNG, 90, stream);
+                byte[] byteArray = stream.toByteArray();
+                Bitmap bitmap2 = BitmapFactory.decodeByteArray(byteArray, 0,
+                        byteArray.length);
+                Bitmap bm = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream bao = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG, 99, bao);
+                byte[] ba = bao.toByteArray();
+                String convbase64 = Base64.encodeToString(ba, Base64.DEFAULT);
+                base64 = convbase64.replaceAll("\n","");
+
+                binding.imgUser.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

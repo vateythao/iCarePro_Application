@@ -116,7 +116,6 @@ public class AppointmentBookingActivity extends AppCompatActivity {
         });
     }
 
-
     private void updateLabel() {
         String myFormat = "dd-MMMM-yyyy";
         SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);

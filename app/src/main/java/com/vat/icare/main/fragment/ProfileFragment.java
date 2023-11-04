@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,9 +15,11 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,9 +39,7 @@ public class ProfileFragment extends Fragment {
 
     private Context mContext;
     private MainActivity mainActivity;
-
-    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+    String currentUser;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -58,8 +59,8 @@ public class ProfileFragment extends Fragment {
         binding.txtEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent=new Intent(getContext(), EditProfileActivity.class);
-                //startActivity(intent);
+                Intent intent=new Intent(getContext(), EditProfileActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -83,9 +84,11 @@ public class ProfileFragment extends Fragment {
 
         });
 
+        FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        currentUser=currentFirebaseUser.getUid();
+
         if (currentUser != null) {
-            String userId = currentUser.getUid();
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(currentUser);
 
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
