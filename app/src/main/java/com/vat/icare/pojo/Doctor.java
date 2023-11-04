@@ -1,14 +1,15 @@
 package com.vat.icare.pojo;
 
 public class Doctor {
-    private String token, name, speciality, gender,medicalDegree ,image, firebaseId, type;
+    private String token, name, speciality, gender,medicalDegree ,image, firebaseId, type,about, email;
     private long date;
 
     public Doctor() {
 
     }
 
-    public Doctor(String token, String name, String speciality, String gender, String medicalDegree, String image, String firebaseId, String type, long date) {
+    public Doctor(String token, String name, String speciality, String gender, String medicalDegree,
+                  String image, String firebaseId, String type, long date,String about,String email) {
         this.token = token;
         this.name = name;
         this.speciality = speciality;
@@ -18,6 +19,16 @@ public class Doctor {
         this.firebaseId = firebaseId;
         this.type = type;
         this.date = date;
+        this.about = about;
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getType() {
@@ -30,6 +41,14 @@ public class Doctor {
 
     public String getFirebaseId() {
         return firebaseId;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
     }
 
     public void setFirebaseId(String firebaseId) {

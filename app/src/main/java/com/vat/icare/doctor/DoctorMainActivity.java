@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.vat.icare.R;
 import com.vat.icare.databinding.ActivityDoctorMainBinding;
 import com.vat.icare.doctor.fragment.BookingFragment;
+import com.vat.icare.doctor.fragment.DoctorProfileFragment;
 import com.vat.icare.doctor.fragment.FragmentChatsDoctor;
 
 public class DoctorMainActivity extends AppCompatActivity {
@@ -20,6 +21,7 @@ public class DoctorMainActivity extends AppCompatActivity {
     FirebaseDatabase database;
     FragmentChatsDoctor fragmentChatsDoctor;
     BookingFragment bookingFragment;
+    DoctorProfileFragment doctorProfileFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class DoctorMainActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_doctor_main);
         fragmentChatsDoctor = new FragmentChatsDoctor();
         bookingFragment = new BookingFragment();
+        doctorProfileFragment = new DoctorProfileFragment();
         setCurrentFragment(fragmentChatsDoctor);
         binding.radioChats.setChecked(true);
         binding.radioChats.setTextColor(getColor(R.color.white));
@@ -37,12 +40,20 @@ public class DoctorMainActivity extends AppCompatActivity {
             if (checkedId == R.id.radioChats) {
                 binding.radioChats.setTextColor(getColor(R.color.white));
                 binding.radioAppointment.setTextColor(getColor(R.color.black));
+                binding.radioProfileDoctor.setTextColor(getColor(R.color.black));
                 setCurrentFragment(fragmentChatsDoctor);
             }
             if (checkedId == R.id.radioAppointment) {
                 binding.radioChats.setTextColor(getColor(R.color.black));
                 binding.radioAppointment.setTextColor(getColor(R.color.white));
+                binding.radioProfileDoctor.setTextColor(getColor(R.color.black));
                 setCurrentFragment(bookingFragment);
+            }
+            if (checkedId == R.id.radioProfileDoctor) {
+                binding.radioChats.setTextColor(getColor(R.color.black));
+                binding.radioAppointment.setTextColor(getColor(R.color.black));
+                binding.radioProfileDoctor.setTextColor(getColor(R.color.white));
+                setCurrentFragment(doctorProfileFragment);
             }
         });
     }

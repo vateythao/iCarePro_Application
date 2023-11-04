@@ -1,50 +1,41 @@
-package com.vat.icare.editProfile;
+package com.vat.icare.doctor;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.vat.icare.R;
-import com.vat.icare.databinding.ActivityEditProfileBinding;
-import com.vat.icare.pojo.User;
+import com.vat.icare.databinding.ActivityEditProfileDoctorBinding;
+import com.vat.icare.pojo.Doctor;
 
-import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
-public class EditProfileActivity extends AppCompatActivity {
+public class EditProfileDoctor extends AppCompatActivity {
+
     String base64;
 
-    ActivityEditProfileBinding binding;
+    ActivityEditProfileDoctorBinding binding;
     DatabaseReference databaseReference;
     String currentUser;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding= DataBindingUtil.setContentView(this, R.layout.activity_edit_profile);
-
+        binding= DataBindingUtil.setContentView(this, R.layout.activity_edit_profile_doctor);
         FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         currentUser=currentFirebaseUser.getUid();
 
@@ -55,14 +46,16 @@ public class EditProfileActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     // Retrieve user data
-                    User user = dataSnapshot.getValue(User.class);
+                    Doctor user = dataSnapshot.getValue(Doctor.class);
                     // Use the user data as needed
                     if (user != null) {
                         String username = user.getName();
                         String email = user.getEmail();
+                        String about=user.getAbout();
                         base64 = user.getImage();
-                        binding.edtProfileName.setText(username);
-                        binding.edtEmailEdit.setText(email);
+                        binding.edtProfileNameDoctor.setText(username);
+                        binding.edtEmailEditDoct.setText(email);
+                        binding.edtAboutDoctor.setText(about);
                         if(base64!=null){
                             byte[] imageAsBytes = Base64.decode(base64.getBytes(), Base64.DEFAULT);
                             binding.imgUser.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
@@ -80,8 +73,9 @@ public class EditProfileActivity extends AppCompatActivity {
         binding.btnSaveProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name=binding.edtProfileName.getText().toString();
-                updatedata(name,base64);
+                String name=binding.edtProfileNameDoctor.getText().toString();
+                String about=binding.edtAboutDoctor.getText().toString();
+                updatedata(name,base64,about);
             }
         });
         binding.imgEditProfilePic.setOnClickListener(new View.OnClickListener() {
@@ -103,56 +97,30 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
             }
         });
-        binding.imgBackEditUser.setOnClickListener(new View.OnClickListener() {
+
+        binding.imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
     }
-
-    private void updatedata(String userName, String image) {
+    private void updatedata(String userName, String image, String about) {
 
         HashMap User = new HashMap();
         User.put("name",userName);
         User.put("image",image);
+        User.put("about",about);
         databaseReference = FirebaseDatabase.getInstance().getReference("Users");
         databaseReference.child(currentUser).updateChildren(User).addOnCompleteListener(task -> {
             if (task.isSuccessful()){
-                Toast.makeText(EditProfileActivity.this,"Successfully Updated",Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditProfileDoctor.this,"Successfully Updated",Toast.LENGTH_SHORT).show();
                 finish();
 
             }else {
-                Toast.makeText(EditProfileActivity.this,"Failed to Update",Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditProfileDoctor.this,"Failed to Update",Toast.LENGTH_SHORT).show();
             }
         });
 
-    }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
-            try {
-                Bundle bundle = data.getExtras();
-                Bitmap bitmap = bundle.getParcelable("data");
-
-                Bitmap bmp = (Bitmap) data.getExtras().get("data");
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.PNG, 90, stream);
-                byte[] byteArray = stream.toByteArray();
-                Bitmap bitmap2 = BitmapFactory.decodeByteArray(byteArray, 0,
-                        byteArray.length);
-                Bitmap bm = (Bitmap) data.getExtras().get("data");
-                ByteArrayOutputStream bao = new ByteArrayOutputStream();
-                bm.compress(Bitmap.CompressFormat.JPEG, 99, bao);
-                byte[] ba = bao.toByteArray();
-                String convbase64 = Base64.encodeToString(ba, Base64.DEFAULT);
-                base64 = convbase64.replaceAll("\n","");
-
-                binding.imgUser.setImageBitmap(bitmap);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

@@ -6,6 +6,6 @@
         android:topLeftRadius="6dp" />
     <gradient
         android:angle="90"
-        android:endColor="@color/redCastIndia"
-        android:startColor="@color/ShadowColor" />
+        android:endColor="@color/themeBlue"
+        android:startColor="@color/themeBlue" />
 </shape>
