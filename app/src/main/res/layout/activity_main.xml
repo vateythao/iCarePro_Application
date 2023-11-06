@@ -11,9 +11,12 @@
         <FrameLayout
             android:id="@+id/mainContainerFrameLayout"
             android:layout_width="match_parent"
+            android:layout_above="@+id/constBottom"
+            android:layout_alignParentTop="true"
             android:layout_height="match_parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constBottom"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:elevation="6dp"

@@ -58,6 +58,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.Holder> {
                 intent.putExtra("token",dataItems.get(position).getToken());
                 intent.putExtra("image",dataItems.get(position).getImage());
                 intent.putExtra("name",dataItems.get(position).getName());
+                intent.putExtra("about",dataItems.get(position).getAbout());
                 intent.putExtra("speciality",dataItems.get(position).getSpeciality());
                 context.startActivity(intent);
             }

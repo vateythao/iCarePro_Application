@@ -31,12 +31,14 @@ public class DoctorDetailsActivity extends AppCompatActivity {
         String name = getIntent().getStringExtra("name");
         String image = getIntent().getStringExtra("image");
         String speciality = getIntent().getStringExtra("speciality");
+        String about = getIntent().getStringExtra("about");
 
         byte[] imageAsBytes = Base64.decode(image.getBytes(), Base64.DEFAULT);
         binding.imgDoctor.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
 
         binding.txtDocName.setText(name);
         binding.txtDoctorSpec.setText(speciality);
+        binding.txtAboutDoc.setText(about);
         binding.imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

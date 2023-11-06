@@ -33,7 +33,6 @@ public class AddMedicineActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_medicine);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_medicine);
 
         binding.btnTime.setOnClickListener(new View.OnClickListener() {

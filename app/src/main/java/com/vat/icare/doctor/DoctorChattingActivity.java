@@ -35,6 +35,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.vat.icare.R;
+import com.vat.icare.calls.AudioCallActivity;
 import com.vat.icare.calls.VideoCallActivity;
 import com.vat.icare.chats.MessageAdapter;
 import com.vat.icare.chats.fcm.APIService;
@@ -125,6 +126,15 @@ public class DoctorChattingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 sendMessage("Calling");
                 Intent intent = new Intent(DoctorChattingActivity.this, VideoCallActivity.class);
+                intent.putExtra("visiter_id", otherUserId);
+                startActivity(intent);
+            }
+        });
+        binding.imgAudioCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessage("Calling");
+                Intent intent = new Intent(DoctorChattingActivity.this, AudioCallActivity.class);
                 intent.putExtra("visiter_id", otherUserId);
                 startActivity(intent);
             }

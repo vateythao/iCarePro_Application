@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
@@ -23,6 +25,7 @@ import com.vat.icare.R;
 import com.vat.icare.databinding.ActivityEditProfileDoctorBinding;
 import com.vat.icare.pojo.Doctor;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
 public class EditProfileDoctor extends AppCompatActivity {
@@ -58,7 +61,7 @@ public class EditProfileDoctor extends AppCompatActivity {
                         binding.edtAboutDoctor.setText(about);
                         if(base64!=null){
                             byte[] imageAsBytes = Base64.decode(base64.getBytes(), Base64.DEFAULT);
-                            binding.imgUser.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
+                            binding.imgUserEdit.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
                         }
                     }
                 }
@@ -122,5 +125,33 @@ public class EditProfileDoctor extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+            try {
+                Bundle bundle = data.getExtras();
+                Bitmap bitmap = bundle.getParcelable("data");
+
+                Bitmap bmp = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.PNG, 90, stream);
+                byte[] byteArray = stream.toByteArray();
+                Bitmap bitmap2 = BitmapFactory.decodeByteArray(byteArray, 0,
+                        byteArray.length);
+                Bitmap bm = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream bao = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG, 99, bao);
+                byte[] ba = bao.toByteArray();
+                String convbase64 = Base64.encodeToString(ba, Base64.DEFAULT);
+                base64 = convbase64.replaceAll("\n","");
+
+                binding.imgUserEdit.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

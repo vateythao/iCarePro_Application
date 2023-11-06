@@ -1,9 +1,12 @@
 package com.vat.icare.calls;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.SurfaceView;
 import android.view.View;
@@ -181,6 +184,13 @@ public class VideoCallActivity extends AppCompatActivity {
             RtcEngine.destroy();
             agoraEngine = null;
         }).start();
+    }
+    public static PendingIntent getActionIntent(Uri uri, Context context) {
+        Intent intent =  new Intent(Intent.ACTION_VIEW,uri);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent acceptIntent = PendingIntent.getActivity(context, 0, intent,
+                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        return acceptIntent;
     }
 
 }

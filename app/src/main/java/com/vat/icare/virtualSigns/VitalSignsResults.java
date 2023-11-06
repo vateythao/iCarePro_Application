@@ -77,17 +77,27 @@ public class VitalSignsResults extends AppCompatActivity {
         binding.btnSaveData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 int sugar = Integer.parseInt(binding.edtSugar.getText().toString());
                 int pulse = Integer.parseInt(binding.RRV.getText().toString());
-
-                if(String.valueOf(sugar).isEmpty()){
+                if(String.valueOf(sugar).equals("")){
+                    Toast.makeText(context, "Please take another Measure", Toast.LENGTH_SHORT).show();
+                }
+                if (String.valueOf(sugar).isEmpty()) {
                     Toast.makeText(context, "No data is available to save", Toast.LENGTH_SHORT).show();
                 }
                 VitalSign vitalSign = new VitalSign(userName, VBP1, VBP2, VRR,
                         sugar, pulse, dateToday);
                 viewModel.insertStudent(vitalSign);
-                Toast.makeText(context, "Completed", Toast.LENGTH_SHORT).show();
-                recreate();
+                VSRR.setText("");
+                VSBPS.setText("");
+                VSHR.setText("");
+                binding.edtSugar.setText("");
+                Intent intent=new Intent(context, MainActivity.class);
+                startActivity(intent);
+                finish();
+
             }
         });
         binding.txtHistory.setOnClickListener(new View.OnClickListener() {
@@ -108,8 +118,8 @@ public class VitalSignsResults extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i = new Intent(VitalSignsResults.this, MainActivity.class);
-        startActivity(i);
+        Intent intent=new Intent(context, MainActivity.class);
+        startActivity(intent);
         finish();
     }
 }
