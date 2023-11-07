@@ -172,6 +172,13 @@ public class VideoCallActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, REQUESTED_PERMISSIONS, PERMISSION_REQ_ID);
         }
         setupVideoSDKEngine();
+
+        binding.imgSwitchCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchCamera();
+            }
+        });
     }
 
     protected void onDestroy() {
@@ -184,6 +191,9 @@ public class VideoCallActivity extends AppCompatActivity {
             RtcEngine.destroy();
             agoraEngine = null;
         }).start();
+    }
+    public void switchCamera() {
+        agoraEngine.switchCamera();
     }
     public static PendingIntent getActionIntent(Uri uri, Context context) {
         Intent intent =  new Intent(Intent.ACTION_VIEW,uri);
