@@ -533,7 +533,7 @@ public class DoctorChattingActivity extends AppCompatActivity {
 
     private void sendNotification(final String username, final String message, final String type) {
 
-        final Data data = new Data(currentUserId, R.drawable.ic_message_text, username, message, getString(R.string.strNewMessage), otherUserId, type);
+        final Data data = new Data(currentUserId, R.drawable.ic_message_text_new, username, message, getString(R.string.strNewMessage), otherUserId, type);
 
         final Sender sender = new Sender(data, data, otherUserToken);
 

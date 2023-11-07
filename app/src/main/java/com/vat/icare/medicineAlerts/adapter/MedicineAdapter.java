@@ -1,5 +1,6 @@
 package com.vat.icare.medicineAlerts.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,7 @@ import com.vat.icare.medicineAlerts.Model;
 import java.util.ArrayList;
 
 public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.Myviewholder>{
-    ArrayList<Model> dataHolder = new ArrayList<Model>();
+    ArrayList<Model> dataHolder;
 
     public MedicineAdapter(ArrayList<Model> dataHolder) {
         this.dataHolder = dataHolder;
@@ -27,11 +28,12 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.Myview
         return new Myviewholder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull Myviewholder holder, int position) {
-        holder.mTitle.setText(dataHolder.get(position).getTitle());
-        holder.mDate.setText(dataHolder.get(position).getDate());
-        holder.mTime.setText(dataHolder.get(position).getTime());
+        holder.mTitle.setText("Reminder:- " + dataHolder.get(position).getTitle());
+        holder.mDate.setText("Date:- " + dataHolder.get(position).getDate());
+        holder.mTime.setText("Time:- " + dataHolder.get(position).getTime());
     }
 
     @Override
@@ -46,7 +48,6 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.Myview
 
         public Myviewholder(@NonNull View itemView) {
             super(itemView);
-
             mTitle = (TextView) itemView.findViewById(R.id.txtTitle);
             mDate = (TextView) itemView.findViewById(R.id.txtDate);
             mTime = (TextView) itemView.findViewById(R.id.txtTime);

@@ -78,7 +78,8 @@ public class AppointmentBookingActivity extends AppCompatActivity {
             myCalendar.set(Calendar.DAY_OF_MONTH, day);
             updateLabel();
         };
-        TimePickerDialog timePickerDialog = new TimePickerDialog(AppointmentBookingActivity.this, new TimePickerDialog.OnTimeSetListener() {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(AppointmentBookingActivity.this,
+                new TimePickerDialog.OnTimeSetListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
@@ -158,7 +159,7 @@ public class AppointmentBookingActivity extends AppCompatActivity {
 
     private void sendNotification(final String username, final String message, final String type) {
 
-        final Data data = new Data(currentUserId, R.drawable.ic_message_text, username, message, getString(R.string.strNewMessage), otherUserId, type);
+        final Data data = new Data(currentUserId, R.drawable.ic_message_text_new, username, message, getString(R.string.strNewMessage), otherUserId, type);
 
         final Sender sender = new Sender(data, data, otherUserToken);
 

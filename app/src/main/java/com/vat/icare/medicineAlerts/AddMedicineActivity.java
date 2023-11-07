@@ -39,7 +39,6 @@ public class AddMedicineActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectTime();
-                //when we click on the choose time button it calls the select time method
             }
         });
 
@@ -47,9 +46,7 @@ public class AddMedicineActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectDate();
-                //when we click on the choose date button it calls the select date method
                 }
-
         });
 
         binding.btnSbumit.setOnClickListener(new View.OnClickListener() {
@@ -67,11 +64,9 @@ public class AddMedicineActivity extends AppCompatActivity {
                     //shows the toast if input field is empty
                 } else {
                     if (time.equals("time") || date.equals("date")) {
-                        //shows toast if date and time are not selected
                         Toast.makeText(getApplicationContext(), "Please select date and time", Toast.LENGTH_SHORT).show();
                     } else {
                         processinsert(title, date, time);
-
                     }
                 }
             }
@@ -167,7 +162,7 @@ public class AddMedicineActivity extends AppCompatActivity {
         try {
             Date date1 = formatter.parse(dateandtime);
             am.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
-            Toast.makeText(getApplicationContext(), "Alaram", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Alarm", Toast.LENGTH_SHORT).show();
 
         } catch (ParseException e) {
             e.printStackTrace();

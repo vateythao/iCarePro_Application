@@ -17,6 +17,7 @@ import com.vat.icare.databinding.FragmentBPHeartFragementBinding;
 import com.vat.icare.databinding.FragmentDoctorBinding;
 import com.vat.icare.domin.VitalSignViewModel;
 import com.vat.icare.medicineAlerts.AddMedicineActivity;
+import com.vat.icare.medicineAlerts.MedicineAlert;
 import com.vat.icare.utils.romDB.VitalSign;
 import com.vat.icare.virtualSigns.VitalSignsProcess;
 import com.vat.icare.virtualSigns.adapter.HistryAdapter;
@@ -54,7 +55,7 @@ public class BPHeartFragement extends Fragment {
         binding.newReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getContext(), AddMedicineActivity.class);
+                Intent i = new Intent(getContext(), MedicineAlert.class);
                 startActivity(i);
             }
         });

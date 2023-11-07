@@ -13,6 +13,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <TextView
+            android:id="@+id/txtViewNoData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/background_edittext"
+            android:paddingHorizontal="@dimen/dp_20"
+            android:paddingVertical="@dimen/dp_5"
+            android:text="No Reminder Added"
+            android:textColor="@color/redCastIndia"
+            android:textSize="@dimen/sp_18"
+            android:textStyle="bold" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/mCreateRem"
@@ -22,7 +34,9 @@
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:layout_marginEnd="30dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="@dimen/dp_20"
+            app:backgroundTint="@color/themeBlue"
+            app:maxImageSize="@dimen/dp_40"
             android:src="@drawable/add_sign" />
 
     </RelativeLayout>
