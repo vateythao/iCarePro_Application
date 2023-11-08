@@ -35,8 +35,10 @@ import java.util.ArrayList;
 public class ChatFragment extends Fragment {
     FragmentChatBinding binding;
     ArrayList<Doctor> list = new ArrayList<>();
+    ArrayList<String> doctorList = new ArrayList<>();
     FirebaseDatabase database;
     AdapterChatListUser adapter;
+    String currentUserId, userID;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -47,10 +49,39 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentChatBinding.inflate(inflater, container, false);
         database = FirebaseDatabase.getInstance();
+        currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         binding.recyclerViewChats.setLayoutManager(layoutManager);
+        binding.imgBackPress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
+        database.getReference().child("Chats_v2").addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String key = dataSnapshot.getKey();
+                    userID = key.replace("-", "").replace(currentUserId, "");
+                    doctorList.add(userID);
+                }
+                getChatList(doctorList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        return binding.getRoot();
+    }
+
+    private void getChatList(ArrayList<String> userList) {
         database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
@@ -58,17 +89,16 @@ public class ChatFragment extends Fragment {
                 list.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Doctor user = dataSnapshot.getValue(Doctor.class);
-                    if (user != null) {
-                        String type = user.getType();
-                        user.setFirebaseId(dataSnapshot.getKey());
-                        if (!user.getFirebaseId().equals(FirebaseAuth.getInstance().getUid())) {
-                            if(type!=null){
-                                if (type.equals("Doctor")) {
-                                    list.add(user);
-                                }
+                    user.setFirebaseId(dataSnapshot.getKey());
+                    for (int i = 0; i < userList.size(); i++) {
+                        if (userList.get(i).equals(user.getFirebaseId())) {
+                            user.setFirebaseId(dataSnapshot.getKey());
+                            if (!list.contains(user)) {
+                                list.add(user);
                             }
                         }
                     }
+
                 }
                 adapter = new AdapterChatListUser(list, getContext());
                 binding.recyclerViewChats.setAdapter(adapter);
@@ -77,17 +107,7 @@ public class ChatFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
-        binding.imgBackPress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent= new Intent(getContext(), MainActivity.class);
-                startActivity(intent);
-            }
-        });
-        return binding.getRoot();
     }
 }

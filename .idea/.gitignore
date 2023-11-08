@@ -1,3 +1,5 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+/sonarlint/securityhotspotstore/index.pb
+/sonarlint/issuestore/index.pb

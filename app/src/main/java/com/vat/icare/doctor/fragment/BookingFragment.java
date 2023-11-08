@@ -23,6 +23,7 @@ import com.vat.icare.pojo.Booking;
 import com.vat.icare.pojo.Doctor;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class BookingFragment extends Fragment {
     FragmentBookingBinding binding;
@@ -53,13 +54,17 @@ public class BookingFragment extends Fragment {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Booking doctors = dataSnapshot.getValue(Booking.class);
                     if (doctors != null) {
-                        doctors.setFirebaseId(dataSnapshot.getKey());
-                        if (!doctors.getFirebaseId().equals(FirebaseAuth.getInstance().getUid())) {
+                        if (currentUserId.equals(doctors.getDoctorId())) {
                             list.add(doctors);
                         }
                     }
                 }
-                adapter = new AdapterBooking(getContext(),list);
+                if (list.isEmpty()) {
+                    binding.txtNoDataFound.setVisibility(View.VISIBLE);
+                } else {
+                    binding.txtNoDataFound.setVisibility(View.GONE);
+                }
+                adapter = new AdapterBooking(getContext(), list);
                 binding.recyclerViewBooking.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }

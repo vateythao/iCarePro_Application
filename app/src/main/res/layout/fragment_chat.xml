@@ -27,6 +27,7 @@
                 <ImageView
                     android:id="@+id/imgBackPress"
                     android:layout_width="25dp"
+                    android:visibility="gone"
                     android:layout_height="30dp"
                     android:src="@drawable/back_arrow" />
 
